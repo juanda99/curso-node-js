@@ -1,0 +1,23 @@
+{
+  "name": "curso-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "reveal-md": "^2.0.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "reveal-md ./index.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juanda99/curso-node-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juanda99/curso-node-js/issues"
+  },
+  "homepage": "https://github.com/juanda99/curso-node-js#readme"
+}

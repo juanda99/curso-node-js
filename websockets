@@ -1,0 +1,24 @@
+
+## Estructura
+- Servidor (node server)
+- Clientes (aplicación web, android app, iphone app )
+- ¿Como va la información?
+  - Del cliente al servidor
+  - Del servidor al cliente
+
+- Sin el uso de websockets la información solo iría del cliente al servidor mediante requests.
+- Así tenemos una apliación en tiempo real.
+  - Cuando el servidor tiene algo nuevo, se lo manda directamente a los clientes sin necesidad de polling
+
+## Integración de socket.io con node
+ 
+- Añadir primero el código de 106.zip para el express con un static dir. Valorar el uso de git o zeit
+
+https://blog.bitsrc.io/8-node-js-web-socket-libraries-for-2018-818e7e5b67cf
+https://davidwalsh.name/websocket
+
+mkdir node-chat-app
+cd node-chat-app
+npm init
+
+(git init)
