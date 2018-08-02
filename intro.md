@@ -1,74 +1,118 @@
+# Introducción a node.js
 
-# Curso de node.js
-
-## Temario del curso
-
-1. Como empezar con Node.js:
-- Instalación de Node
-- Gestión de versiones de node
-- Uso de linters
-- Debug en Node
-- Vistazo general a las características de ES6 y ES7. Qué puedo usar con Node
-
-2. Realizar proyectos/paquetes con node
-- Uso del gestor de paquetes
-- Instalación y configuración de paquetes del repositorio de npm
-- Gestión de dependencias
-- Creación de una librería
-- Publicación en npm
-
-3. Crear scripts de servidor mediante node
-- Aprender a manejar la naturaleza asíncrona de node: callbacks, promosas, async-await
-- Uso de paquetes relacionados con el sistemas de ficheros
-- Configuración de microservicios
- 
-4. Node.js para web:
-- Crear un servidor API REST mediante express 
-- Operaciones CRUD contra base de datos
-- Operaciones CRUD autenticadas mediante tokens según OAUTH2
-- Uso de Postman para comprobar API
-- Uso de WebSockets
+![](img/nodejs2.png)
 
 
 
-## Pasos previos
-- Máquina virtual Ubuntu mediante Vmware
-  - Usuario: curso
-  - pwd: P@ssw0rd
-- Instalación Visual Studio Code
-- 
-1. Node: como empezar:
-- Instalación de node.
-- Gestión de versiones de node.
-- Debug en node con Visual Studio Code
-- Vistazo general a las características de ES6 y ES7. Qué puedo usar con node (https://node.green/).
+## Qué es node.js 
+- [Sitio web de node.js](https://nodejs.org/en/):
+> Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
+
+- Node.js es un intérprete de JavaScript que se ejecuta en servidor (sin navegador).
 
 
-# JavaScript en servidor
+## Google Chrome V8
 
-![](nodejs.png)
-
-
-## Qué es nodejs
-
-- NodeJS es un intérprete de JavaScript que se ejecuta en servidor.
-- Está basado en el motor de JavaScript que utiliza Google Chrome (V8), escrito en C++
+- Es el motor de JavaScript que utiliza Google Chrome y node
+  - Escrito en C++
+  - [Motor de código abierto](https://chromium.googlesource.com/v8/v8.git)
+  - Compila a código máquina
 
 
-## Características principales
+## Hola Mundo en node
 
-- Mismo lenguaje en cliente y servidor
+![](./img/hola-mundo-consola-node2.png)
+
+
+## Hola Mundo en browser
+
+![](./img/hola-mundo-consola-browser2.png)
+
+
+## HTML DOM
+![](img/html-dom.jpg)
+
+
+## Objeto Window en JavaScript
+
+- Objeto global en JavaScript
+- Almacena todo sobre lo que se tiene acceso
+![](./img/objeto-window-browser.png)
+
+  
+
+## Objeto "Window" en Node
+
+- El objeto global en Node, se llama **global**:
+
+![](./img/objeto-window-browser.png)
+
+
+## Objeto Document en JavaScript
+
+- Lo que se está viendo en el navegador
+- Podemos modificarlo en runtime
+![](./img/document-browser.png)
+
+
+## Objeto Process en node
+
+- Process (node) = document (JavaScript)
+- Vemos la información del proceso node que se está ejecutando:
+  - pid
+  - versión de node
+  - métodos
+  - ...
+
+```js
+$ node
+> process
+....
+> process.exit(3) // también podríamos hacer .exit(3), o CTRL +C dos veces
+$ echo $?
+3
+```
+
+
+## Node vs JavaScript
+
+- El código en ambos es JavaScript
+- Ambos se ejecutan con el mismo motor [si usamos Chrome)
+- Node utiliza el motor fuera del contexto del navegador
+  - No hay un *browser sandbox*
+  - Tenemos funcionalidad añadida:
+    - Acceso al file system
+    - Acceso a bbdd *completa*
+    - Incluso montar un servidor web
+
+
+## Funcionamiento código
+
+- Se lee el codigo en JavaScript
+- Se compila a código máquina por el V8 y se ejecuta:
+
+>V8 compiles JavaScript directly to native machine code before executing it, instead of more traditional techniques such as interpreting bytecode or compiling the whole program to machine code and executing it from a filesystem. The compiled code is additionally optimized (and re-optimized) dynamically at runtime, based on heuristics of the code's execution profile. 
+[(wikipedia)](https://en.wikipedia.org/wiki/Chrome_V8)
+
+
+## Características de node
+
+- **Mismo lenguaje en cliente y servidor**
   - Permite a cualquier persona desarrollar en backend o en frontend
   - Permite reusar código o incluso mover código de cliente a servidor o al revés
 
-- Está orientado a eventos y utiliza un modelo asíncrono (propio de JavaScript).
+- **No bloqueante (asíncrono) por naturaleza**
+  - Los métodos síncronos, llevan el sufijo sync
+
+- El **mayor repositorio de código disponible**: [npm](https://www.npmjs.com/)
+  - composer(php) o jpm(java) están basados en npm
+
+- **Orientado a eventos**
 
 
-- Al contrario que en el navegador, encontramos muchas llamadas asíncronas:
-  - Llamadas a APIs
-  - Lectura y escritura de ficheros
-  - Ejecución de cálculos en el servidor
-  - ....
+- Es monohilo
+  - Utiliza un solo procesador
+  - Si queremos usar toda la potencia de la CPU, tendremos que levantar varias instancias de node y utilizar un balanceador de carga ([por ejemplo con pm2](https://github.com/Unitech/pm2))
 
 
 - Llamadas síncronas en servidor serían fatales:
@@ -76,170 +120,136 @@
   - Al ser asíncrono podremos tener muchas sesiones concurrentes
 
 
-- Es monohilo
-- Utiliza un solo procesador
-- Si queremos usar toda la potencia de la CPU, tendremos que levantar varias instancias de node y utilizar un balanceador de carga ([por ejemplo con pm2](https://github.com/Unitech/pm2))
+## Ejemplo código no bloqueante
 
-
-
-
-## Desventajas
-- Trabajar con código asíncrono hace que a veces el código no sea excesivamente legible
-- Imagina que guardamos un registro de los accesos de los usuarios a nuestra app:
-
-```
-trackUser = function(userId) {
-users.findOne({userId: userId}, function(err, user) {
-var logIn = {userName: user.name, when: new Date};
-logIns.insert(logIn, function(err, done) {
-console.log('wrote log-in!');
-});
-});
+```js
+const fs = require('fs')
+fs.readFile('./prueba.txt', 'utf-8', (err, data) => {
+  if (err) throw err
+  console.log(`El contenido del fichero es este: ${data}`)
+})
+console.log(`Aquí todavia no tenemos el valor de fs.readFile`)
 ```
 
-- Tenemos 3 funciones anidadas en una simple operación.
-- Esto es lo que se conoce como [callback hell](https://strongloop.com/strongblog/node-js-callback-hell-promises-generators/)
 
+## Ejemplo código bloqueante
 
-## Evitar el callback en el navegador
-
-- Mediante el [uso de promesas](https://www.promisejs.org/)
-- Se trata de escribir código asíncrono con un estilo síncrono.
-- Opciones más actuales:
-- Generators / Yields (ES6)
-- Async / Await (ES7)
-- El soporte de ES6 en node es limitado (--harmony) y también en el navegador => TRANSPILERS (babel)
-- Ver [comparativa de métodos asíncronos](https://thomashunter.name/blog/the-long-road-to-asyncawait-in-javascript/)
-
-
-## Hola Mundo en node
-
-- Editamos un fichero en JavaScript, *holaMundo.js*:
+```js
+const fs = require('fs');
+const data = fs.readFileSync('./prueba.txt', 'utf-8');
+console.log(`El contenido del fichero es este: ${data}`)
 ```
-console.log ("Hola Mundo");
+
+
+## Consulta de API de node
+
+- El módulo fs pertenence a los core modules de node, no es necesario instalarlo
+- Para consultar la API:
+  - [Desde el navegador](https://nodejs.org/api/index.html)
+  - Desde el terminal (plugin node de zsh)
+    ```bash
+      $ node-docs
+     ```
+
+
+## Bloqueante vs no bloqueante
+
+- El **código asíncrono** tiene un **throughput mucho mayor**.
+- Se puede volver **complejo** el trabajar con el resultado de una función asíncrona.
+  - El código asíncrono no se ejecuta de forma secuencial, más dificil de seguir
+  - El método asíncrono recibe como último parámetro una **función de callback**
+
+
+## ¿Qué sería lo ideal?
+- Utilizar **código secuencial y asíncrono**
+  - Para ello utilizaremos **promesas** y **async/await**
+
+
+
+
+# Instalación de node.js
+
+
+## Tipos de instalación
+
+- Desde el [sitio web de Node.js](https://nodejs.org/en/)
+- Mediante un gestor de versiones
+  - Es habitual utilizar varias versiones de node en nuestra máquina de desarrollo o por cada usuario.
+  - Esto nos permitirá:
+  - Poder cambiar de versión de node de forma transparente
+  - Evitar tener que hacer sudo cuando instalemos paquetes de forma global
+    - Los paquetes globales se instalan para un único usuario y version de node
+    - Los paquetes globales sirven para cualquier proyecto
+
+
+## Gestores de versiones de node
+
+- Los gestores de versiones más habituales son:
+
+- [nvm](https://github.com/creationix/nvm) para Linux/Mac
+- [nvm-windows](https://github.com/coreybutler/nvm-windows) para Windows (no tiene nada que ver con nvm)
+- [n](https://github.com/tj/n) para Linux/Mac
+
+
+## Instalación de node mediante nvm
+
+- Ver las versiones que hay instaladas:
+
 ```
-- Lo ejecutamos mediante *node holaMundo.js*
-- Si escribimos *node* sin más, podemos acceder a la consola de node, un intérprete de JavaScript, igual que el que tenemos en el navegador
+nvm ls
+```
+
+- Instalar una versión de node (instalará hasta su ultimo patch):
+
+```
+nvm install 8.11 
+```
+
+```
+nvm install node --lts
+```
 
 
-## npm
-- Es el gestor de paquetes de node
-- Propongo hacer dos prácticas para coger la dinámica del uso de npm y sus librerías y de trabajar con node:
-- Crear una librería en node.js
-- Crear una api rest mediante node.js
+## Usar una versión de node
 
-## Qué es node 
-- De la página de node:
-Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
-- JavaScript en servidor
-- Se ejecutan ambos con el mismo (v8 engine, motor de código abierto, escrito en C++) que compila a código máquina
+- Usar una versión en particular:
 
-$node
->console.log("Hola Mundo");
+```
+nvm use 8.11.3
+```
 
+- Usar una versión en particular siempre que abrimos un shell:
 
-Si vamos a Chrome -> Developer tools haríamos lo mismo. En ambos casos ejecutamos el v8 engine.
-Las diferencias es que node puede manipular por ej el sistema de ficheros, y javascript otras cosas como la url.
-- Ver objeto window (todas las variables cuelgan de ahí) 
-- Lo mismo en node con el objeto global    
-
-- Document en browser
-- process en node: ejemplo process.exit(0);   
+```
+nvm alias default 8.11.3
+```
 
 
+## Usar una versión de node en un proyecto
 
-## Ventajas
-- Compañías como Uber, Wallmart, Netflix... 
-- Blocking vs non blocking (dibujar esperas.... para ver las ventajas)
-- Eventos attach event listener en el event loop.... con su función de callback
+- Para un proyecto en particular, mediante un fichero .nvmrc
 
-- Imagina un web server... blocking, no sirve más peticiones hasta que acaba la primera.. (blocking I/O, NET requests...)
-- npm es el ecosistema más grande de librerías open source en el mundo
-
-node es de naturaleza non blocking, hay libererías non-blocking en otros lenguajes (ej pyhton pero esas propias liberías están escritas en modo blocking)
-
-- ¿Lo coge otro hilo? No, ....Nodejs tiene un solo thread....
-- Levantar más threads no siempre es la solución (más gasto de memoria RAM o CPU por ej)
-
-Ejemplo de uso de node: npm validate object (búsqueda en google o en npm, yo prefiero google)
+- Ojo, hay que ejecutar nvm use "a mano" para que lea la versión
+  - Otra opción es modificar el zsh
+  - Otra opción es instalar un paquete adicional, avn:
 
 
-## Hello World
-- Ejemplo típico
+## Linter para Node.js
 
-require para usar modules!!
-
-
-console.log(module);
-module.exports.edad = (edad) => `Tienes ${edad} años`
+- Eslint analiza el código y nos muestra errores.
+- Eslint avisa de muchos errores, pero [solo arregla algunos](https://eslint.org/docs/rules/)
+  - https://medium.com/@netczuk/your-last-eslint-config-9e35bace2f99
+- Utilizaremos prettier
 
 
-const fechas = require('./edad.js');
-console.log("Hola Mundo");
-console.log(fechas.edad(15));
+## Editor de código
 
+- Utilizaremos [Visual Code Editor](https://code.visualstudio.com/)
+- Es un producto open source de Microsoft realizado mediante node.js (electron)
+- Tiene un buen debugger para node.js
 
-lodash
-fs ---------> ¿No necesito npm install?
-os
- 
-Install nodemon, development purposes (install with -g but better with --dev)
+## Linter para JavaScript
 
-
-
-## Obtener input del usuario
-- socketIO para obtener datos en tiempo real de una aplicación web
-- Mediante una API y ajax requests
-- Desde la línea de comandos
-
-## Input desde la línea de comandos
-- No utilizaremos nodemon porque vamos a cambiar la llamada a la línea de comandos
-console.log(process.argv);
-
-$ node app.js prueba
-[ '/Users/juandaniel/.nvm/versions/node/v8.11.3/bin/node',
-  '/Users/juandaniel/Code/kk/app.js',
-  'prueba' ]
-
-- Para recoger el parámetro prueba:
-var command = process.argv[2];
-console.log(`command: ${command}`);
-
-if (command === 'add´) {
-  console.log('adding user');
-} else if (command === 'remove') {
-
-} else {
-  console.log('Command not recognized');
-}
-
-node app.js remove --user='pepe'
-Entre comillas por si hay espacios, comidas dobles en windows!!! en Linux/Mac da igual
-
-Pero como parseamos este segundo argumento????
-
-Y si lo hacemos así:
-node app.js remove --user pepe
-¡¡Tendremos un tercer argumento!!!
-
-Usaremos yargs para hacer el parseo desde línea de comandos. ----> Obtenemos un objeto
-const yargs = require('yargs');
-const argv = yargs.argv;
-console.log(`Process: ${process.argv}`);
-console.log(`yargs: ${argv}`);
-
-
-
-## Working with json
-const obj = {name: "pepe"};
-
-var stringObj = JSON.stringify(obj); para obtener el string del objeto
-console.log(typeof stringObj);
-console.log(stringOjbj);
-
-Observamos que los atributos también van con comillas.
-
-var person = JSON.parse (string);
-Ahora podemos obtener por ej:
-console.log(typeof person);
-console.log(person.name);
+- Utilizaremos eslint (el más habitual)
+- Instalaremos la extensión eslint dentro de Visual Code Editor
+- Utilizaremos eslint como dependencia de desarrollo dentro de nuestros proyectos

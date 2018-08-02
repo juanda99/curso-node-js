@@ -1,0 +1,7 @@
+.reveal blockquote {
+  width: 90%;
+  font-size: smaller;
+}
+.reveal pre code {
+  max-width: 900px;
+}

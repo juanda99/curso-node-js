@@ -8,7 +8,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "reveal-md ./index.md"
+    "start": "reveal-md --css style.css ./index.md"
   },
   "repository": {
     "type": "git",

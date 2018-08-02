@@ -144,7 +144,42 @@ const user = require ('./user.js')
 - Comprobamos la ejecución que muestra el texto del módulo requerido por consola.
 
 
-## Uso de variables y funciones de otro módulo
+## Módulos en JavaScript
+
+- En JavaScript no hay módulos ni namespaces.
+- [Se implementan módulos de forma nativa con ES6 (2014)](http://exploringjs.com/es6/ch_modules.html#sec_modules-in-javascript)
+
+```html
+# more index.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var nombre = "pepe";
+    console.log(nombre);
+  </script>
+  <script src="./index.js"></script>
+  <script>
+    console.log(nombre);
+  </script>
+</body>
+
+</html>
+```
+
+```js
+# more index.js:
+var nombre = "juan";
+```
+- Todo va al objeto window y la variable se sobreescribe.
+
+
+
+## Uso de variables y funciones de otro módulo en node
 
 - El objeto module tiene muchas propiedades, nos interesará **module.exports**
 
