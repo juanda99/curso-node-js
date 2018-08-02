@@ -8,7 +8,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "reveal-md --css style.css ./index.md"
+    "start": "reveal-md --css style.css ./index.md",
+    "print": "reveal-md --theme white index.md --print index.pdf"
   },
   "repository": {
     "type": "git",

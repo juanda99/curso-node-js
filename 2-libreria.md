@@ -1,7 +1,7 @@
 # Crear una librería en node.JS
 
 
-## Librerías en node
+## Librerías en Node.js
 - Suelen ser pequeñas
 - Es un buen ejemplo de ciclo de desarrollo en node.js
 - Ayuda a tener claro el concepto de paquetes de node
@@ -80,12 +80,41 @@ npm adduser
 # Proyecto cervezas
 
 
-## Creamos el proyecto
-  ```
-  mkdir cervezas_xx
-  cd cervezas_xx
+## Crear repositorio en GitHub
+
+- Realizamos un fork de mi proyecto
+  - Así tendremos el fichero para la práctica
+  - .gitignore correctamente configurado
+  - Puedo hacer seguimiento de vuestros desarrollos
+
+
+![](img/hacer-fork.png)
+
+
+![](img/visualizacion-fork.png)
+
+
+![](img/listado-fork.png)
+
+
+## Clonar repositorio a local
+
+```
+git clone <url proyecto>
+```
+- La url la copiamos del repo de GitHub (ver captura)
+  - ssh normalmente en linux (necesitas importar la clave pública a GitHub)
+  - https normalmente en windows / mac
+
+
+![](img/clonar-repo.png)
+
+
+## Crear proyecto
+```
+  cd cervezas
   npm init
-  ```
+```
 - xx será un número: **no puede haber dos proyectos con el mismo nombre en npm**
 - El *entry-point* lo pondremos en *src/index.js*, así separaremos nuesto código fuente de los tests.
 - El resto de parámetros con sus valores por defecto

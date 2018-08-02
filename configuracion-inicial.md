@@ -10,10 +10,9 @@
 - Máquina virtual Ubuntu mediante Vmware
   - Usuario: curso
   - pwd: P@ssw0rd
-- Instalación Visual Studio Code
 
 
-## Lista de software instalado
+## Lista de aplicaciones instaladas
 
 - Chrome
 - Postman
@@ -24,13 +23,13 @@
 ## Lista de paquetes instalados
 - zsh & Oh-my-zsh
 - git
-- Docker CE
+- Docker CE y Docker Compose
 - curl y wget
 - nvm, node, avn
 
 
 
-# Instalación de software
+# Instalación de aplicaciones
 
 
 ## Instalación de Chrome
@@ -49,7 +48,6 @@ sudo apt-get install google-chrome-stable
 ```bash
 snap install postman
 ```
-
 
 
 ## Instalación de guake
@@ -84,11 +82,14 @@ sudo apt install guake
   sudo apt-get install code # or code-insiders
   ```
 
-- Peviamente instalamos curl:
+- Peviamente instalamos curl (y wget ya que estamos):
 
   ```bash
-  sudo apt install curl
+  sudo apt install curl wget
   ```
+
+
+# Instalación de paquetes
 
 
 ## Instalación de Docker CE
@@ -137,10 +138,11 @@ docker-compose version 1.22.0, build 1719ceb
 
 - Algunos prefieren fish
 - Otros son fieles a bash
-```
-sudo apt install zsh
-chsh -s $(which zsh)
-```
+- Yo prefiero zsh:
+  ```bash
+  sudo apt install zsh
+  chsh -s $(which zsh)
+  ```
 
 
 ## Instalación de Oh-my-zsh
@@ -154,13 +156,27 @@ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/i
 - Plugins añadidos: yarn npm node sudo web-search
 
 
-## Instalación de git
 
-```bash
-sudo apt install git
-git config --global user.name "Your Name"
-git config --global user.email "youremail@domain.com"
-```
+# Instalación de node.js
+
+
+## Tipos de instalación
+
+- Desde el [sitio web de Node.js](https://nodejs.org/en/)
+- Mediante un gestor de versiones:
+  - Varias versiones de Node.js en la misma máquina
+  - Evitar tener que hacer sudo cuando instalemos paquetes de forma global
+    - Los paquetes globales se instalan para un único usuario y version de node
+    - Los paquetes globales sirven para cualquier proyecto
+
+
+## Gestores de versiones de node
+
+- Los gestores de versiones más habituales son:
+
+- [nvm](https://github.com/creationix/nvm) para Linux/Mac
+- [nvm-windows](https://github.com/coreybutler/nvm-windows) para Windows (no tiene nada que ver con nvm)
+- [n](https://github.com/tj/n) para Linux/Mac
 
 
 ## Instalación de nvm
@@ -180,56 +196,113 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 ```
 
-## Instalación de node
 
-```bash
-➜  ~ nvm install node
-Downloading and installing node v10.7.0...
-Downloading https://nodejs.org/dist/v10.7.0/node-v10.7.0-linux-x64.tar.xz...
-########################## 100,0%
-Computing checksum with sha256sum
-Checksums matched!
-Now using node v10.7.0 (npm v6.1.0)
-Creating default alias: default -> node (-> v10.7.0)
+## Instalación node mediante nvm
 
-➜  ~ nvm install --lts
-Installing latest LTS version.
-Downloading and installing node v8.11.3...
-Downloading https://nodejs.org/dist/v8.11.3/node-v8.11.3-linux-x64.tar.xz...
-######################## 100,0%
-Computing checksum with sha256sum
-Checksums matched!
-Now using node v8.11.3 (npm v5.6.0)
+- Ver versiones instaladas:
+  ```
+  nvm ls
+  ```
+- Instalar una versión de node (hasta ultimo patch):
+  ```
+  nvm install 8.11
+  ```
+- Instala la última versión lts:
+  ```
+  nvm install node --lts
 ```
+- Instala la última versión disponible:
+  ```
+  nvm install node
+  ```
+
+
+## Seleccionar versión de node
+
+- Usar una versión en particular:
+  ```
+  nvm use 8.11.3
+  ```
+
+- Usar una versión en particular al abrir shell:
+  ```
+  nvm alias default 8.11.3
+  ```
+
+
+## Seleccionar versión de node por proyecto
+
+- Para un proyecto en particular, mediante un fichero .nvmrc
+
+- Ojo, hay que ejecutar ```nvm use``` "a mano" para que lea la versión
+  - Otra opción es modificar el .zshrc
+  - Otra opción es instalar un paquete adicional **avn**:
 
 
 ## Instalación de avn
-- [avn sirve para detectar la versión de node de cada proyecto y cambiar el ejecutabla que se utiliza](https://github.com/wbyoung/avn)
+- [avn sirve para detectar la versión de node de cada proyecto y cambiar el ejecutable que se utiliza](https://github.com/wbyoung/avn)
 
 - avn se instala mediante el gestor de paquetes
-    - Tendremos que tener previamente alguna versión de node instalada.
-
-```bash
-$ npm install -g avn avn-nvm
-$ avn setup
-Now when you cd into a directory with a .node-version file, avn will automatically detect the change and use your installed version manager to switch to that version of node. What goes in your .node-version file? A semver version number corresponding to the version of Node.js that your project uses.
-```
-
+  ```bash
+  $ npm install -g avn avn-nvm
+  $ avn setup
+  ```
 - Es un poco lento, no del gusto de todos
 
 
-# Configuración de Visual Code Editor
+## Configuración avn
+- Creamos fichero *.node-versión* dentro de nuestro proyecto
+  ```
+  cd proyecto
+  echo v10 >.node-version
+  ```
+- Cada vez que entremos en el directorio se activará la versión de node correspondiente
+  - ¡Debe estar instalada!
 
-## 
+
+## Linter para Node.js
+
+- Eslint analiza el código y nos muestra errores.
+- Eslint avisa de muchos errores, pero [solo arregla algunos](https://eslint.org/docs/rules/)
+  - https://medium.com/@netczuk/your-last-eslint-config-9e35bace2f99
+- Utilizaremos prettier 
+  - Formateador de código
+  - Se combina con eslint y arregla más errores
+
+
+## Instalación de git
+
+```bash
+sudo apt install git
+git config --global user.name "Your Name"
+git config --global user.email "youremail@domain.com"
+```
+
+
+## Configuración GitHub
+- Crear cuenta en GitHub si no tienes
+- Generar clave ssh y exportar pública a GitHub si no usas ssh en vez de https
+
+
+
+# Editor de código
+
+
+## Visual Code Editor
+
+- Utilizaremos [Visual Code Editor](https://code.visualstudio.com/)
+- Es un producto open source de Microsoft realizado mediante node.js (electron)
+- Tiene un buen debugger para node.js
+
+
+## Vistazo general
 
 - Emmet ya viene por defecto
-- Instalamos settings sync para sincronizar configuración entre equipos
-- Ver extensiones: https://marketplace.visualstudio.com/
-
-
-
-Jest: para tests https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest
-https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
+- Visor markdown por defecto
+- Integración con GitHub
+- Debug integrado
+- Gestor de extensiones integrado
+  - [Extensiones online](https://marketplace.visualstudio.com/)
 
 
 ## Edición
@@ -239,6 +312,17 @@ https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
   ```
   "editor.tabSize": 2
   ```
+
+
+## Jest
+
+Jest: para tests https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest
+https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
+
+
+## Sincronizar configuración entre equipos
+
+- Instalamos settings sync para sincronizar configuración entre equipos
 
 
 ## Autocompletado
@@ -252,15 +336,15 @@ https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
 ```
 
 
-## Formateador de código 
-- [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-
-
 ## Linter
 
 - Utilizaremos [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - Tendremos que instalar posteriormente el propio linter y establecer su configuración 
-    - En cada proyecto en particular
+  - En cada proyecto en particular
+
+
+## Formateador de código 
+- [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 
 ## Markdown linter
@@ -273,6 +357,7 @@ https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
   "MD012": false
 }
 ```
+
 
 ## Markdown
  

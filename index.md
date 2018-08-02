@@ -60,38 +60,32 @@ Septiembre 2018
 # Enfoque del curso
 
 
-## Configuración inicial
+## [Configuración inicial](./configuracion-inicial.md)
 
-- Trabajamos con una máquina virtual parcialmente preparada:
-  - Visual Code con extensiones
+- Trabajamos con una máquina virtual prácticamente preparada:
+  - Visual Code (sin configurar)
   - Docker
   - zsh
   - ...
-- Está [documentada la instalación](./configuracion-inicial.md)
-- Lo veremos por encima y se mencionará donde se utilice
 
 
-## Introducción a node.js
-
-- [Cómo empezar con node.js](./intro.md)
-  - Instalación
-  - Gestión de versiones
-  - Características principales
+## [Introducción a Node.js](./intro.md)
+  - Características principales de Node.js
 
 
 ## Proyectos
 
 - Proyectos pequeños donde veremos los contenidos:
   - npm
-  - Promises
-  - Servidor web con node y arquitectura API REST
+  - Promises y async-await
+  - Servidor web con node, arquitectura API REST y operaciones CRUD
   - Autenticación con json web tokens
   - WebSockets
 
 
-- Implementaremos en varios proyectos las siguientes tecnologías:
+- Utilizaremos en varios proyectos las siguientes tecnologías:
   - Gestión versiones mediante git
-  - Test con enfoque TDD (Test Driven Development)
+  - Test con enfoque TDD (Test Driven Development) y Code Coverage
   - Dockerización de servidores adicionales (MongoDB)
   - Despliegue serverless
 
