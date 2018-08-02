@@ -15,9 +15,10 @@ Septiembre 2018
 
 - Juan Daniel Burró Aláez (juandacorreo@gmail.com)
   - Profesor informática en CPIFP Los Enlaces
-  - Atribución funciones: desarrollo [nuevo Arasaac](https://www.beta.arasaac.org)
-    - SPA con React.js
-    - API REST con node.js y MongoDB
+  - Actuálmente en atribución funciones: 
+    - Desarrollo [nuevo portal Arasaac](https://www.beta.arasaac.org)
+      - SPA con React.js
+      - API REST con node.js y MongoDB
 
 
 
