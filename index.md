@@ -124,7 +124,7 @@ Septiembre 2018
 
 ## [Proyecto 4: Lista de tareas](./package.md)
 
-- *Clásico ejercicio de todo list en fichero*
+- *Clásico ejercicio de todo list con persistencia en fichero*
 - Uso de json.
 
 

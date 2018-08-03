@@ -3,12 +3,13 @@
 ![](img/nodejs2.png)
 
 
-
 ## Qué es node.js 
 - [Sitio web de node.js](https://nodejs.org/en/):
 > Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
 
 - Node.js es un intérprete de JavaScript que se ejecuta en servidor (sin navegador).
+
+- [Situación actual del desarrollo web](https://github.com/kamranahmedse/developer-roadmap)
 
 
 ## Google Chrome V8
@@ -163,3 +164,51 @@ console.log(`El contenido del fichero es este: ${data}`)
 ## ¿Qué sería lo ideal?
 - Utilizar **código secuencial y asíncrono**
   - Para ello utilizaremos **promesas** y **async/await**
+
+
+
+# Versiones de JS
+
+
+## EcmaScript vs JavaScript
+
+## TC39
+
+
+
+![](./img/chiste.gif)
+
+
+
+## JavaScript timeline
+
+![](./img/timeline.png)
+
+
+![](./img/es-evolution.png)
+
+
+## Versiones actuales
+- ES6: Jun 2015
+  - El comite decidió publicar especificaciones ECMAScript de forma anual
+  - Se renombro a **ES2015** 
+
+- **ES2016** (ES7)
+
+- **ES2017** (ES8)
+
+- **ES.Next**: Término dinámico, se refiere a la próxima versión de ECMAScript.
+
+
+## ¿Qué puedo usar?
+
+- Node: 
+  - http://kangax.github.io/compat-table/es5/
+  - https://node.green/
+
+- Web:
+  - https://caniuse.com
+
+
+
+

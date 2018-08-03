@@ -5,3 +5,6 @@
 .reveal pre code {
   max-width: 900px;
 }
+.reveal section img {
+  background-color: white;
+}

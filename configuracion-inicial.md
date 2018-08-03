@@ -236,11 +236,11 @@ export NVM_DIR="$HOME/.nvm"
 
 - Ojo, hay que ejecutar ```nvm use``` "a mano" para que lea la versión
   - Otra opción es modificar el .zshrc
-  - Otra opción es instalar un paquete adicional **avn**:
+  - Otra opción es instalar un paquete adicional: **avn**
 
 
 ## Instalación de avn
-- [avn sirve para detectar la versión de node de cada proyecto y cambiar el ejecutable que se utiliza](https://github.com/wbyoung/avn)
+- [avn](https://github.com/wbyoung/avn) sirve para *detectar la versión de node de cada proyecto* y cambiar el ejecutable que se utiliza
 
 - avn se instala mediante el gestor de paquetes
   ```bash
@@ -270,7 +270,7 @@ export NVM_DIR="$HOME/.nvm"
   - Se combina con eslint y arregla más errores
 
 
-## Instalación de git
+## Instalación y configuración de git
 
 ```bash
 sudo apt install git
@@ -280,7 +280,7 @@ git config --global user.email "youremail@domain.com"
 
 
 ## Configuración GitHub
-- Crear cuenta en GitHub si no tienes
+- [Crear cuenta en GitHub](https://github.com/join?source=header-home) si no tienes
 - Generar clave ssh y exportar pública a GitHub si no usas ssh en vez de https
 
 
@@ -291,7 +291,7 @@ git config --global user.email "youremail@domain.com"
 ## Visual Code Editor
 
 - Utilizaremos [Visual Code Editor](https://code.visualstudio.com/)
-- Es un producto open source de Microsoft realizado mediante node.js (electron)
+- Es un producto open source de Microsoft realizado mediante node.js ([electron](https://electronjs.org/))
 - Tiene un buen debugger para node.js
 
 
@@ -316,13 +316,17 @@ git config --global user.email "youremail@domain.com"
 
 ## Jest
 
-Jest: para tests https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest
-https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
+[Jest](https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest): autocompletado para tests mediante Jest
+
+
+## Chrome Debugger
+
+- [Debug mediante Visual Studio de código web](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome)
 
 
 ## Sincronizar configuración entre equipos
 
-- Instalamos settings sync para sincronizar configuración entre equipos
+- [Instalamos settings sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync) para sincronizar configuración entre equipos
 
 
 ## Autocompletado
