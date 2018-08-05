@@ -1,47 +1,65 @@
 # Crear una librería en node.JS
 
 
-## Librerías en Node.js
-- Suelen ser pequeñas
-- Es un buen ejemplo de ciclo de desarrollo en node.js
-- Ayuda a tener claro el concepto de paquetes de node
-
-
-## Microlibrerías
-- Ventajas
-  - Poco código, se entiende y modifica con facilidad
-  - Reusable
-  - Fácil hacer tests
-- Desventajas
-  - Tienes que gestionar muchas dependencias
-  - Control de versiones de todas ellas
-
-
 ## Funcionalidad librería
 
 - Obtiene una marca de cerveza y sus características
 - Obtiene una o varias marcas de cerveza al azar.
+- Tiempo estimado: 150 minutos
+
+
+## Objetivos
+
+- Ayuda a tener claro el concepto de paquetes de Node
+- Ciclo de desarrollo de un proyecto en Node.js
+  - GitHub y versiones
+  - Linters
+  - Publicación en npm
+- Repaso de todo lo visto anteriormente
+
+
+## Microlibrerías
+- Las librerías en Node.js suelen ser pequeñas
+- A menudo se usan varias combinadas
+- Lo mismo sucede con los microservicios
+- Se sigue la línea de la programación funcional
+
+
+- Ventajas
+  - Poco código, se entiende y modifica con facilidad
+  - Reusable
+  - Fácil hacer tests
+
+
+- Desventajas
+  - Tienes que gestionar muchas dependencias
+  - Control de versiones de todas ellas
+    - Utilizamos [semantic versioning](https://docs.npmjs.com/getting-started/semantic-versioning)
+    - Fichero *package-lock.json* para instantánea de versiones de nuestras librerías
 
 
 ## Control de versiones
-- Utilizaremos git como control de versiones
-- Utilizaremos github como servidor git en la nube para almacenar nuestro repositorio:
-- Haz login con tu usuario (o crea un usuario nuevo)
-  - Crea un nuevo repositorio en GitHub (lo llamaré *cervezas*)
-  - Sigue las indicaciones de GitHub para crear el repositorio en local y asociarlo al repositorio remoto (GitHub)
+- Utilizaremos git como control de versiones de nuestro proyecto
+- Utilizaremos [GitHub](https://github.com/) como servidor git en la nube
+  - Crea un usuario en [GitHub](https://github.com/)  si no lo tienes
+  - Comprueba que tengas git correctamente configurado:
+    ```
+    git config list
+    ```
+  - Exporta tu clave pública ssh a GitHub si vas a usar ssh para hacer el sync de repositorios
 
 
 ## npm
-- Es el gestor de paquetes de node
-- **Debemos crear un usuario** en https://www.npmjs.com/
-- Podemos buscar los paquetes que nos interese instalar
-- Podemos publicar nuestra librería :-)
+- Es el gestor de paquetes de node:
+  - Podemos buscar librerías para usar
+  - Podemos publicar nuestra propia librería :-)
+- Debemos [crear un usuario en npm](https://www.npmjs.com/)
 
 
 ## Configuración de npm
 - Cuando creemos un nuevo proyecto nos interesa que genere automaticamente datos como nuestro nombre o email
-- Ver [documentación para su configuación](https://docs.npmjs.com/) o mediante consola (```npm --help```)	:
-- Mediante ```npm config --help``` vemos los comandos de configuración
+- Ver [documentación para su configuación](https://docs.npmjs.com/) o mediante consola (*npm --help*)	:
+- Mediante *npm config --help* vemos los comandos de configuración
 
 
 - Mediante ```npm config list``` vemos los parámetros de configuración
@@ -55,7 +73,7 @@ npm adduser
 ```
 
 - Los cambios se guardan en el fichero $HOME/.npmrc
-- ```npm adduser``` genera un authtoken = login automático al publicar en el registro de npm
+- *npm adduser* genera un authtoken = login automático al publicar en el registro de npm
 
 
 ## Versiones en node
@@ -77,7 +95,7 @@ npm adduser
 
 
 
-# Proyecto cervezas
+# Empezamos proyecto
 
 
 ## Crear repositorio en GitHub
@@ -112,10 +130,10 @@ git clone <url proyecto>
 
 ## Crear proyecto
 ```
-  cd cervezas
+  cd <url proyecto>
   npm init
 ```
-- xx será un número: **no puede haber dos proyectos con el mismo nombre en npm**
+- package_name debe ser único: **no puede haber dos proyectos con el mismo nombre en npm**
 - El *entry-point* lo pondremos en *src/index.js*, así separaremos nuesto código fuente de los tests.
 - El resto de parámetros con sus valores por defecto
 - ¡Ya tenemos nuestro **package.json** creado!
@@ -124,18 +142,89 @@ git clone <url proyecto>
 ## Listar todas las cervezas:
 - Editamos nuestro fichero *src/index.js*
 ```
-var cervezas = require('./cervezas.json')
+const cervezas = require('./cervezas.json');
 module.exports = {
-todas: cervezas
-}
+  todas: cervezas
+};
 ```
 - Abrimos una consola y comprobamos que funcione nuestra librería:
 ```
 node
-> var cervezas = require('./index.js')
+> const cervezas = require('./index.js')
 undefined
 > cervezas.todas
 ```
+
+
+## Estilo de código
+- Puede que colabore más gente en nuestra librería
+  - Queremos un estilo uniforme
+- Y si nos detecta fallos mejor
+
+- Instalaremos eslint (*D* o *--save-dev*)
+  ```
+  npm i -D eslint
+  ```
+
+
+## Configuración de eslint
+```
+$ node_modules/.bin/eslint --init
+? How would you like to configure ESLint? 
+  Use a popular style guide
+? Which style guide do you want to follow? 
+  Standard 
+? What format do you want your config file to be in? 
+  JSON
+? Would you like to install them now with npm? 
+  Yes
+```
+
+
+## Análisis configuración
+- Debemos cambiar nuestro código de src/index.js
+- *.eslintrc.json* tiene la configuración de nuestro linter
+- [Podríamos modificarla](https://eslint.org/docs/rules/), por ej:
+```
+{
+    "extends": "standard",
+    "rules": {
+        "semi": [
+            "error",
+            "allways"
+        ],
+        "no-var": "error"
+    }
+}
+```
+- Ayuda: Pulsa *CTRL + espacio* para autocompletado
+
+
+## Modificaciones Visual Code Editor
+
+- Prettier debe basarse en el fichero eslintrc
+- Modificaciones de eslint al guardar
+- Visual Code da sugerencias por ejemplo para cambiar el tipo de módulos de Node.JS (CommonJs, síncrono) a ES6 Modules (asíncrono). 
+  - [No nos interesan](https://nodejs.org/api/esm.html)
+
+```
+  "prettier.eslintIntegration": true,
+  "eslint.autoFixOnSave": true, //podríamos usar prettier-eslint
+  "javascript.suggestionActions.enabled": false
+```
+
+
+- Observa que prettier tiene unas configuraciones por defecto:
+  ```
+    // Whether to add a semicolon at the end of every line
+    "prettier.semi": true,
+
+    // If true, will use single instead of double quotes
+    "prettier.singleQuote": false,
+  ```
+
+- Debemos quedarnos con lo que se define en eslint, que es más parametrizable.
+- [Configuración sin Visual Code Editor](https://prettier.io/docs/en/eslint.html)
 
 
 ## Obtener una cerveza al azar:
@@ -145,11 +234,11 @@ npm i -S unique-random-array
 ```
 - Configuramos nuestro fuente:
 ```
-cervezas = require('./cervezas.json')
-var uniqueRandomArray = require ('unique-random-array')
+const cervezas = require('./cervezas.json')
+const uniqueRandomArray = require('unique-random-array')
 module.exports = {
-todas: cervezas,
-alazar: uniqueRandomArray(cervezas)
+  todas: cervezas,
+  alazar: uniqueRandomArray(cervezas)
 }
 ```
 
@@ -158,18 +247,20 @@ alazar: uniqueRandomArray(cervezas)
 
 ## Subir a GitHub
 
-- Crear un **.gitignore** para no sincronizar **node_modules**
-- Los comandos que habrá que hacer luego son:
-```
-git status
-git add -A
-git status
-git commit -m "versión inicial"
-```
-- Verificar en el git status que procesa .gitignore.
-```
-git push
-```
+- **.gitignore** no sincroniza **node_modules**:
+  ```
+  $ du -sh node_modules
+  43M	node_modules
+  ```
+
+- Subir a GitHub ( o desde el editor de código):
+  ```bash
+  git status # node_module no debería estar
+  git add -A
+  git status
+  git commit -m "versión inicial"
+  git push
+  ```
 - Comprobamos desde GitHub.
 
 
@@ -242,6 +333,54 @@ npm publish --tag beta
 npm install <nombre paquete>@beta
 ```
 
+
+## Jest Tests
+
+npm i -D jest
+
+  "scripts": {
+    "test": "jest"
+  },
+
+
+Inicializamos para usar node y no jsdom:
+node_modules/.bin/jest --init
+(crea elemento jest.config.js), podría ir también en el package.json
+
+Todos los elementos de tipo object no está.
+Instalamos: https://www.npmjs.com/package/jest-extended
+npm install --save-dev jest-extended
+
+Configuramos:
+jest.config.js añadimos:
+setupTestFrameworkScriptFile: 'jest-extended',
+
+Otra opción sería añadirlo antes de realizar los tests:
+require('jest-extended')
+
+
+Por ejemplo:
+https://github.com/jest-community/jest-extended#tosatisfyallpredicate
+
+
+Todas las opciones para las assertions:
+https://jestjs.io/docs/en/expect
+https://github.com/jest-community/jest-extended
+
+
+ collectCoverage: true
+collectCoverageFrom: ['src/*js'],
+
+
+  "scripts": {
+    "test": "jest",
+    "test-watch": "jest --watch" 
+  },
+
+
+## Debug
+
+¡No me funciona! ????
 
 ## Tests
 - Utilizaremos **Mocha** y **Chai**
@@ -332,7 +471,7 @@ done();
 - Cada vez que desarrollamos una versión de nuestra libería:
 - Ejecutar los tests
 - Hay que realizar un commit
-- Hay que realizar un tag del commig
+- Hay que realizar un tag del commit
 - Push a GitHub
 - Publicar en npm
 - ...

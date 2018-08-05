@@ -170,19 +170,54 @@ console.log(`El contenido del fichero es este: ${data}`)
 # Versiones de JS
 
 
-## EcmaScript vs JavaScript
+## ECMAScript
 
-## TC39
+- Estándarización del JavaScript de NetScape (1997)
+- Implementaciones de ECMAScript:
+  - JavaScript
+  - JScript (Microsoft)
+  - ActionScript (Adobe)
+  - ..
 
+
+## [TC39](https://github.com/tc39/)
+
+- [Cómite técnico encargado de la especificación de ECMAScript](https://github.com/orgs/tc39/people)
+  - Yahoo
+  - Paypal
+  - Google
+  - Microsoft
+  - ....
 
 
 ![](./img/chiste.gif)
 
 
-
 ## JavaScript timeline
 
 ![](./img/timeline.png)
+
+
+## ECMAScript 4
+- A favor de grandes cambios:
+  - Microsoft (Silverlight con C#)
+  - Adobe (Adobe air con ActionScript)
+- A favor de mantener compatibilidad con lo anterior:
+  - Google
+  - Yahoo
+
+
+## ECMAScript 5
+- No tiene tantas grandes novedades
+- jQuery nace en el 2006 para paliar las diferencias entre navegadores
+
+
+![](./img/es-evolution.png)
+
+
+## ECMAScript 6
+- Grandes novedades
+- Se pueden usar [transpilers](https://babeljs.io/)
 
 
 ![](./img/es-evolution.png)
@@ -202,6 +237,15 @@ console.log(`El contenido del fichero es este: ${data}`)
 
 ## ¿Qué puedo usar?
 
+- En Web tenemos que vivir con la fragmentación 
+  - V8 - Google Chrome (Chromium, MongoDB)
+  - SpiderMonkey Firefox (GNOME, Adobe).
+  - Chakra -  Microsoft IE y Edge
+- En Node es más sencillo porque:
+  - Solo hay un motor
+  - Nosotros elegimos su versión
+
+
 - Node: 
   - http://kangax.github.io/compat-table/es5/
   - https://node.green/
@@ -211,4 +255,6 @@ console.log(`El contenido del fichero es este: ${data}`)
 
 
 
+# ¿Empezamos el código?
 
+- [Primer proyecto](./1-proyecto-hola-usuario.md)

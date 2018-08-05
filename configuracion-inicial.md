@@ -26,6 +26,7 @@
 - Docker CE y Docker Compose
 - curl y wget
 - nvm, node, avn
+- chrome-gnome-shell
 
 
 
@@ -87,6 +88,17 @@ sudo apt install guake
   ```bash
   sudo apt install curl wget
   ```
+
+## Configuración gnome-shell
+
+- Mediante web https://extensions.gnome.org/
+- Instalamos extensión *Integración con GNOME Shell*
+- Instalamos conector:
+  ```
+  sudo apt install chrome-gnome-shell
+  ```
+- Instalo aplicación [Alternate Tab](https://extensions.gnome.org/extension/15/alternatetab/)
+  - Cambio de aplicación ALT+TAB sin agrupar por aplicación
 
 
 # Instalación de paquetes
@@ -276,6 +288,11 @@ export NVM_DIR="$HOME/.nvm"
 sudo apt install git
 git config --global user.name "Your Name"
 git config --global user.email "youremail@domain.com"
+git config --global core.editor "vim"
+```
+- Comprobamos:
+```
+$ git config --list
 ```
 
 

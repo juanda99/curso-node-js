@@ -1,4 +1,6 @@
-# Proyecto Hola Usuario
+# Proyecto 1:  Hola Usuario
+
+
 
 ## Descripción
 
@@ -8,9 +10,9 @@
   Hola usuario, tienes 25 años
   ```
 
-- Usuario se obtendrá de la variable de entorno (username)
+- Usuario se obtendrá de la variable de entorno ($USERNAME)
 - La edad se obtendrá de una variable
-
+- Tiempo estimado: 60 minutos.
 
 ## Objetivos
 
@@ -28,6 +30,7 @@ cd holaUsuario
 touch app.js
 code .
 ```
+
 
 ## Añadir texto a un fichero
 
@@ -61,7 +64,7 @@ console.log(user); // para ver que datos tiene userInfo()
 ```
 
 
-### ES6: Destructuring
+## ES6: Destructuring
 
 - Mapeamos una o varias partes de un objeto a una o varias variables:
 
@@ -72,6 +75,7 @@ console.log(y); // 2
 console.log(z); // { a: 3, b: 4 }
 ```
 
+
 ## ES6: Template Strings
 
 ```js
@@ -80,6 +84,7 @@ var b = 10;
 console.log(`Fifteen is ${a + b} and not ${2 * a + b}.`);
 // "Fifteen is 15 and not 20."
 ```
+
 
 ## ES6: Object Literal Property Value Shorthand
 
@@ -91,6 +96,7 @@ console.log(`Fifteen is ${a + b} and not ${2 * a + b}.`);
   }
   ```
 
+
 - Ahora (ES6):
 
   ```js
@@ -99,7 +105,8 @@ console.log(`Fifteen is ${a + b} and not ${2 * a + b}.`);
   }
   ```
 
-# Solución
+
+## Implementación ES5
 
 ```js
 const fs = require('fs')
@@ -107,11 +114,11 @@ const os = require('os')
 const user = os.userInfo()
 
 console.log('Iniciando app')
-// fs.appendFile('saludo.txt', `Hola ${user.username}`)
+fs.appendFile('saludo.txt', `Hola ${user.username}`)
 ```
 
 
-## Solución ES6
+## Implementación ES6
 
 ```js
 const fs = require('fs')
@@ -121,6 +128,7 @@ const { username } = os.userInfo()
 console.log('Iniciando app')
 fs.appendFile('saludo.txt', `Hola ${username}`)
 ```
+
 
 ## require
 - *require* es un módulo que está en el objeto global
@@ -133,13 +141,14 @@ fs.appendFile('saludo.txt', `Hola ${username}`)
 ## Uso de módulos
 
 - Creamos el fichero user.js con el siguiente texto:
-
-```js
-console.log('Cargando módulo para el usuario');
-```
+  ```js
+  console.log('Cargando módulo para el usuario');
+  ```
 
 - ¿Cómo lo cargamos dentro de nuestro app.js?
-const user = require ('./user.js')
+  ```
+  const user = require ('./user.js')
+  ```
 
 - Comprobamos la ejecución que muestra el texto del módulo requerido por consola.
 
@@ -147,7 +156,7 @@ const user = require ('./user.js')
 ## Módulos en JavaScript
 
 - En JavaScript no hay módulos ni namespaces.
-- [Se implementan módulos de forma nativa con ES6 (2014)](http://exploringjs.com/es6/ch_modules.html#sec_modules-in-javascript)
+- [Se implementan módulos de forma nativa con ES6](http://exploringjs.com/es6/ch_modules.html#sec_modules-in-javascript)
 
 ```html
 # more index.html
@@ -170,6 +179,7 @@ const user = require ('./user.js')
 
 </html>
 ```
+
 
 ```js
 # more index.js:
@@ -210,7 +220,6 @@ module.exports = { username, edad }
 ```
 
 
-
 ## Ejercicio
 
 - ¿Qué mostraría el siguiente programa?
@@ -234,7 +243,14 @@ require('./module1')
 console.log('Ejecutando módulo 2');
 ```
 
+
 ## Solución
-- Ejecutando módulo 1 se muestra solo una vez
+- El texto *Ejecutando módulo 1* se muestra solo una vez
   - Ya está cargado previamente, se usa la caché y no se ejecuta
-  - El texto *Inicializando app* sale después del console.log de los require ya que los require son síncronos.
+  - El texto *Inicializando app* sale después del console.log de los require (los require son síncronos).
+
+
+
+# ¿Y ahora qué?
+
+- [Proyecto apuntes en markdown](./2-proyecto-apuntes.md)

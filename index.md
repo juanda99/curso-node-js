@@ -94,7 +94,7 @@ Septiembre 2018
 # Contenido de los proyectos
 
 
-## [Proyecto 1: Aplicación ¡Hola Usuario!](./proyecto-hola-usuario.md)
+## [Proyecto 1: Aplicación ¡Hola Usuario!](./1-proyecto-hola-usuario.md)
 
 - *Escribe un mensaje en un fichero:*
   
@@ -107,14 +107,14 @@ Septiembre 2018
 - Uso de **módulos propios** y **built-in modules**
 
 
-## [Proyecto 2: Documentación apuntes](./markdown.md)
+## [Proyecto 2: Documentación apuntes](./2-proyecto-apuntes.md)
   
 - *Generación de slides y pdf a partir de markdown, útil para hacer apuntes*
 - Uso de **módulos de terceros**
 - Configuración de proyecto y gestión de paquetes mediante **npm**
 
 
-## [Proyecto 3: Crear una librería](./library.md)
+## [Proyecto 3: Crear una librería](./3-proyecto-libreria.md)
 
 - *Crear una librería a partir de un json de datos*
 - Configuración de **linters**
