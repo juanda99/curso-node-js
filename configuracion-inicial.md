@@ -394,3 +394,10 @@ $ git config --list
 ## [ExpressSnippet](https://marketplace.visualstudio.com/items?itemName=vladmrnv.expresssnippet)
 
 - Para autocompletado con Express
+- Se disparan con *app*
+
+
+## [Promise Snippet](https://marketplace.visualstudio.com/items?itemName=progre.promise-snippets)
+
+- Para autocompletado de promesas
+- Se disparan con *promise*
