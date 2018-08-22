@@ -5,7 +5,7 @@
 
 ## Descripción
 
-- *Realizar consultas a servicios API*
+- *Realizar consultas a servicios API realizando un conversor en tiempo real de divisas*:
 
 
 ## Objetivos
@@ -158,3 +158,178 @@ fs.readFileAsync("file.js", "utf8").then(...)
 ```
 
 - Uso de Async-Await (nuestro principal objetivo)
+
+
+
+## Práctica consumiendo APIs
+
+- El objetivo es completar una función *covertCurrency* que:
+  -  Haga conversiones entre divisas:
+  -  Muestre los paises que utilizan la divisa de destino
+
+- Parámetros de entrada:
+  - <código moneda origen>, por ej. EUR
+  - <código moneda destino>, por ej. USD
+  - <cantidad a cambiar>, por ej. 100 (USD)
+
+- Salida requerida, por ej:
+
+  ```bash
+  Vendiendo 100 EUR obtienes 115 USD. Los puedes utilizar en los siguientes países....
+  ```
+
+
+## Servicios de API's
+
+- [Fixer](https://fixer.io/)
+  - Para obtener los tipos de cambio
+  - Es necesario autenticarse
+
+- Necesitaremos crear una función del tipo
+
+  ```js
+  const exchangeRate = (from, to) => {
+    // consulta a la API de Fixer
+  }
+  ```
+
+- La cuenta gratuita solo permite EUR como moneda base:
+  - http://data.fixer.io/api/latest?access_key=03b3abfc3fe505ecd38bbeebe6211dfe&BASE=EUR
+  - Si nuestra moneda base no es EUR, tendremos que hacer otra pequeña conversión por nuestra cuenta
+
+
+- [Rest Countries](https://restcountries.eu/)
+  - Nos interesará para obtener los paises que utilizan una determinada moneda
+  - No es necesario autenticarse
+  - Hay un endpoint específico para monedas
+
+- Necesitaremos crear una función del tipo
+
+  ```js
+  const getCountries = (currencyCode) => {
+    // consulta a la API de Rest Countries, endpoint de divisas (currency)
+  }
+  ```
+
+
+## Librerías para http requests
+
+- Instalaremos [axios](https://www.npmjs.com/package/axios) (usa promesas)
+
+```bash
+npm i -S axios
+```
+
+- Nos ofrece directamente los datos parseados (no es necesario *JSON.parse*)
+
+
+const axios = require('axios');
+
+
+## Implementación función getExchangeRate
+
+```js
+const getExchangeRate = (from, to) => {
+  return axios.get('http://data.fixer.io/api/latest?access_key=xxxxxxxxxx').then((response)=>{
+    const euro = 1 / response.data.rates[from]
+    const rate = euro * response.data.rates[to]
+    return rate
+  })
+}
+
+getExchangeRate('USD', 'CAD').then((rate) => {
+  console.log(rate)
+})
+```
+
+
+## Implementación función getExchangeRate con async-await
+
+```js
+const getExchangeRate = async (from, to) => {
+  const response = await axios.get('http://data.fixer.io/api/latest?access_key=xxxxxxxxxx')
+  const euro = 1 / response.data.rates[from]
+  const rate = euro * response.data.rates[to]
+  return rate
+}
+
+getExchangeRate('USD', 'CAD').then((rate) => {
+  console.log(rate)
+})
+```
+
+
+## Implementación función getCountries
+
+```js
+const getCountries = async (currencyCode) => {
+  return axios.get(`https://restcountries.eu/rest/v2/currency/${currencyCode}`).then((response) => {  return response.data.map((country) => country.name)}
+)}
+
+getCountries('CAD').then((countries) => {
+  console.log(countries)
+})
+```
+
+- Intenta ahora implementar getCountries con async-await
+
+
+## Implementación función getCountries con async-await
+
+```js
+const getCountries = async (currencyCode) => {
+  const response = await axios.get(`https://restcountries.eu/rest/v2/currency/${currencyCode}`)
+  return response.data.map((country) => country.name)
+}
+
+getCountries('CAD').then((countries) => {
+  console.log(countries)
+})
+```
+
+
+## Implementación función convertCurrency
+
+- Utilizaremos las funciones *getExchangeRates* y *getCountries*
+
+```js
+const convertCurrency = (from, to, amount) => {
+  getExchangedRate(from, to).then((rate)=>{
+    const = convertedAmount = (amount)*rate.toFixed(2)
+    return getCountries(to)
+  }).then ((countries))=>{
+    console.log(countries)
+    // return `Vendiendo ${amount} ${from} obtienes ${convertedAmount} ${to}. Los puedes utilizar en los siguientes paises: ${countries.join(', ')}`;
+  }
+}
+
+convertCurrency('USD', 'USD', 20).then((message) => {
+  console.log(message);
+})
+```
+
+## Problemas
+
+- Para devolver el mensaje hay variables que están fuera del scope
+- Ya nos pasó al hacer la suma de números de ficheros... ¿sabrías solucionarlo?
+
+
+## Solución
+
+
+
+- Y ahora, ¿lo sabrías refactorizar usando async-await?
+  
+```js
+const convertCurrency = async (from, to, amount) => {
+  const rate = await getExchangeRate(from, to);
+  const countries = await getCountries(to);
+  const convertedAmount = (amount * rate).toFixed(2);
+  return `Vendiendo ${amount} ${from} obtienes ${convertedAmount} ${to}. Los puedes utilizar en los siguientes paises: ${countries.join(', ')}`;
+}
+Vendiendo 100 EUR obtienes 115 USD. Los puedes utilizar en los siguientes países....
+
+convertCurrency('USD', 'USD', 20).then((message) => {
+  console.log(message);
+})
+```
