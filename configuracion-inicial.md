@@ -389,3 +389,8 @@ $ git config --list
 ## Servidor Web
 - Se instala y se pulsa luego en el botón Go Live (parte inferior).
 - [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+
+
+## [ExpressSnippet](https://marketplace.visualstudio.com/items?itemName=vladmrnv.expresssnippet)
+
+- Para autocompletado con Express

@@ -9,7 +9,10 @@
 
 - Node.js es un intérprete de JavaScript que se ejecuta en servidor (sin navegador).
 
-- [Situación actual del desarrollo web](https://github.com/kamranahmedse/developer-roadmap)
+
+## [Situación actual del desarrollo web](https://github.com/kamranahmedse/developer-roadmap)
+
+![](img/web-2018.png)
 
 
 ## Google Chrome V8
@@ -22,7 +25,7 @@
 
 ## Hola Mundo en node
 
-![](./img/hola-mundo-consola-node2.png)
+![](./img/hola-mundo-consola-node.png)
 
 
 ## Hola Mundo en browser
@@ -40,13 +43,12 @@
 - Almacena todo sobre lo que se tiene acceso
 ![](./img/objeto-window-browser.png)
 
-  
 
 ## Objeto "Window" en Node
 
 - El objeto global en Node, se llama **global**:
 
-![](./img/objeto-window-browser.png)
+![](./img/objeto-global-node.png)
 
 
 ## Objeto Document en JavaScript
@@ -58,13 +60,6 @@
 
 ## Objeto Process en node
 
-- Process (node) = document (JavaScript)
-- Vemos la información del proceso node que se está ejecutando:
-  - pid
-  - versión de node
-  - métodos
-  - ...
-
 ```js
 $ node
 > process
@@ -74,11 +69,18 @@ $ echo $?
 3
 ```
 
+- process (node) = document (JavaScript)
+- Vemos la información del proceso node que se está ejecutando:
+  - pid
+  - versión de node
+  - métodos
+  - ...
+
 
 ## Node vs JavaScript
 
 - El código en ambos es JavaScript
-- Ambos se ejecutan con el mismo motor [si usamos Chrome)
+- Ambos se ejecutan con el mismo motor (si usamos Chrome)
 - Node utiliza el motor fuera del contexto del navegador
   - No hay un *browser sandbox*
   - Tenemos funcionalidad añadida:
@@ -105,13 +107,13 @@ $ echo $?
 - **No bloqueante (asíncrono) por naturaleza**
   - Los métodos síncronos, llevan el sufijo sync
 
+
 - El **mayor repositorio de código disponible**: [npm](https://www.npmjs.com/)
   - composer(php) o jpm(java) están basados en npm
 
 - **Orientado a eventos**
 
-
-- Es monohilo
+- Es **monohilo**
   - Utiliza un solo procesador
   - Si queremos usar toda la potencia de la CPU, tendremos que levantar varias instancias de node y utilizar un balanceador de carga ([por ejemplo con pm2](https://github.com/Unitech/pm2))
 
@@ -162,8 +164,10 @@ console.log(`El contenido del fichero es este: ${data}`)
 
 
 ## ¿Qué sería lo ideal?
+
 - Utilizar **código secuencial y asíncrono**
   - Para ello utilizaremos **promesas** y **async/await**
+- Evitaremos la anidación de funciones de callback, conocido como **callback hell**
 
 
 
@@ -212,9 +216,6 @@ console.log(`El contenido del fichero es este: ${data}`)
 - jQuery nace en el 2006 para paliar las diferencias entre navegadores
 
 
-![](./img/es-evolution.png)
-
-
 ## ECMAScript 6
 - Grandes novedades
 - Se pueden usar [transpilers](https://babeljs.io/)
@@ -245,6 +246,8 @@ console.log(`El contenido del fichero es este: ${data}`)
   - Solo hay un motor
   - Nosotros elegimos su versión
 
+
+## Tablas de compatibilidades
 
 - Node: 
   - http://kangax.github.io/compat-table/es5/

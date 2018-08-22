@@ -9,6 +9,9 @@
   "devDependencies": {},
   "scripts": {
     "start": "reveal-md --css style.css ./index.md",
+    "web": "reveal-md index.md --static --static-dirs=img",
+    "api": "reveal-md --css style.css ./6-api.md",
+    "9": "reveal-md --css style.css ./9-promises.md",
     "print": "reveal-md --theme white index.md --print index.pdf"
   },
   "repository": {

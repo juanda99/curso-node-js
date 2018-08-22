@@ -1,23 +1,29 @@
-# Proyecto 1:  Hola Usuario
+# Proyecto 1: Hola Usuario
 
+## Tiempo estimado: 60 minutos
 
 
 ## Descripción
 
-- Realizar un programa que escriba en un fichero (append) el texto
+- Realizar un programa que escriba en un fichero el texto siguiente:
   
   ```bash
   Hola usuario, tienes 25 años
   ```
 
-- Usuario se obtendrá de la variable de entorno ($USERNAME)
-- La edad se obtendrá de una variable
-- Tiempo estimado: 60 minutos.
+  - Usuario se obtendrá de la variable de entorno
+
+    ```bash
+    $USERNAME
+    ```
+
+  - La edad se obtendrá de una variable
+
 
 ## Objetivos
 
 - Entender el funcionamiento de los módulos
-  - Utilizar modulos del núcleo (os, fs)
+  - Utilizar módulos del núcleo (os, fs)
   - Crear un módulo sencillo
 - Usar sintaxis de ES6 (*destructuring* y *template string*)
 
@@ -32,25 +38,39 @@ code .
 ```
 
 
-## Añadir texto a un fichero
+## Módulos de sistema
 
-- Función asíncrona:
-  
-  ```js
-  console.log('Iniciando app');
-  const fs = require('fs');
-  // fs es un objeto con muchas funciones, ver api
-  fs.appendFile('saludo.txt', 'Hola Usuario');
+- Están "built-in"
+  - Se cargan mediante un *require*
+  - No es necesario instalarlos
+- Podemos consultarlos en la web de node:
+  - https://nodejs.org/es/docs/
+    - Elegimos versión de la API
+  - Simplemente ejecutando (zsh + plugin node):
+
+  ```bash
+  node-docs
   ```
 
 
-- Podemos recoger error o éxito con función de callback sería lo suyo para evitar warning:
+## Añadir texto a un fichero
+
+- Función asíncrona:
+
+```js
+console.log('Iniciando app');
+const fs = require('fs');
+// fs es un objeto con muchas funciones, ver api
+fs.appendFile('saludo.txt', 'Hola Usuario');
+```
+
+
+- ¡Recoger error o éxito con función de callback para evitar warning!
     ```js
     (node:9493) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
     ```
 
 - Podríamos utilizar también una función síncrona (no lo haremos)
-
 
 
 ## Obtener el nombre del usuario
@@ -90,20 +110,19 @@ console.log(`Fifteen is ${a + b} and not ${2 * a + b}.`);
 
 - Antes (ES5):
 
-  ```js
-  function createMonster(name, power) {
-    return { type: 'Monster', name: name, power: power };
-  }
-  ```
-
+```js
+function createMonster(name, power) {
+  return { type: 'Monster', name: name, power: power };
+}
+```
 
 - Ahora (ES6):
 
-  ```js
-  function createMonster(name, power) {
-    return { type: 'Monster', name, power };
-  }
-  ```
+```js
+function createMonster(name, power) {
+  return { type: 'Monster', name, power };
+}
+```
 
 
 ## Implementación ES5
@@ -156,10 +175,19 @@ fs.appendFile('saludo.txt', `Hola ${username}`)
 ## Módulos en JavaScript
 
 - En JavaScript no hay módulos ni namespaces.
+- Todo va al objeto window y puede haber solapamiento de variables.
 - [Se implementan módulos de forma nativa con ES6](http://exploringjs.com/es6/ch_modules.html#sec_modules-in-javascript)
 
+
+- Fichero index.js
+
+```js
+var nombre = "juan";
+```
+
+- Fichero index.html
+
 ```html
-# more index.html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -179,14 +207,6 @@ fs.appendFile('saludo.txt', `Hola ${username}`)
 
 </html>
 ```
-
-
-```js
-# more index.js:
-var nombre = "juan";
-```
-- Todo va al objeto window y la variable se sobreescribe.
-
 
 
 ## Uso de variables y funciones de otro módulo en node
@@ -249,6 +269,12 @@ console.log('Ejecutando módulo 2');
   - Ya está cargado previamente, se usa la caché y no se ejecuta
   - El texto *Inicializando app* sale después del console.log de los require (los require son síncronos).
 
+
+## Ejercicio
+- Crea dos ficheros numero1.txt y numero2.txt y escribe un número en cada uno
+- Crea un programa que: 
+  - Lea el contenido de los dos fichero y lo almacene en variables
+  - Muestre por consola la suma de las variables
 
 
 # ¿Y ahora qué?

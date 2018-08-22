@@ -1,11 +1,12 @@
 # Proyecto 2:  Apuntes en MarkDown
 
+## Tiempo estimado: 45 minutos
 
 
 ## Descripción
 
 - *Generación de slides y pdf a partir de markdown, útil para hacer apuntes*
-- Tiempo estimado: 45 minutos
+
 
 
 ## Objetivos

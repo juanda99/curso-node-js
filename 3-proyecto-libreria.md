@@ -1,4 +1,6 @@
-# Crear una librería en node.JS
+# Proyecto 3: Crear una librería
+
+## Tiempo estimado: 150 minutos
 
 
 ## Funcionalidad librería
@@ -19,6 +21,7 @@
 
 
 ## Microlibrerías
+
 - Las librerías en Node.js suelen ser pequeñas
 - A menudo se usan varias combinadas
 - Lo mismo sucede con los microservicios
@@ -39,17 +42,19 @@
 
 
 ## Control de versiones
+
 - Utilizaremos git como control de versiones de nuestro proyecto
 - Utilizaremos [GitHub](https://github.com/) como servidor git en la nube
   - Crea un usuario en [GitHub](https://github.com/)  si no lo tienes
   - Comprueba que tengas git correctamente configurado:
-    ```
+    ```bash
     git config list
     ```
   - Exporta tu clave pública ssh a GitHub si vas a usar ssh para hacer el sync de repositorios
 
 
 ## npm
+
 - Es el gestor de paquetes de node:
   - Podemos buscar librerías para usar
   - Podemos publicar nuestra propia librería :-)
@@ -57,6 +62,7 @@
 
 
 ## Configuración de npm
+
 - Cuando creemos un nuevo proyecto nos interesa que genere automaticamente datos como nuestro nombre o email
 - Ver [documentación para su configuación](https://docs.npmjs.com/) o mediante consola (*npm --help*)	:
 - Mediante *npm config --help* vemos los comandos de configuración
@@ -77,6 +83,7 @@ npm adduser
 
 
 ## Versiones en node
+
 - Se utiliza [Semantic Versioning](http://semver.org/)
 - Formato versiones: ***major.minor.patch***
   - **major**: Cambios en compatibilidad de API
@@ -86,16 +93,19 @@ npm adduser
 
 
 ## ¿Cómo trabajo?
+
 - Antes era práctica habitual:
-  ```
+
+  ```bash
   npm set save-exact true
   ```
+
 - Ahora con package-lock.json no es necesario
 - Esta novedad la trajo **yarn**, otro gestor de paquetes.
 
 
 
-# Empezamos proyecto
+## Empezamos proyecto
 
 
 ## Crear repositorio en GitHub
@@ -106,20 +116,21 @@ npm adduser
   - Puedo hacer seguimiento de vuestros desarrollos
 
 
-![](img/hacer-fork.png)
+![Como hacer fork](img/hacer-fork.png)
 
 
-![](img/visualizacion-fork.png)
+![Visualización fork](img/visualizacion-fork.png)
 
 
-![](img/listado-fork.png)
+![Listado de forks](img/listado-fork.png)
 
 
 ## Clonar repositorio a local
 
-```
+```bash
 git clone <url proyecto>
 ```
+
 - La url la copiamos del repo de GitHub (ver captura)
   - ssh normalmente en linux (necesitas importar la clave pública a GitHub)
   - https normalmente en windows / mac
@@ -129,26 +140,32 @@ git clone <url proyecto>
 
 
 ## Crear proyecto
-```
+
+```bash
   cd <url proyecto>
   npm init
 ```
+
 - package_name debe ser único: **no puede haber dos proyectos con el mismo nombre en npm**
-- El *entry-point* lo pondremos en *src/index.js*, así separaremos nuesto código fuente de los tests.
+- El *entry-point* lo pondremos en *src/index.js*, así separaremos nuesto código fuente de los tests
 - El resto de parámetros con sus valores por defecto
 - ¡Ya tenemos nuestro **package.json** creado!
 
 
 ## Listar todas las cervezas:
+
 - Editamos nuestro fichero *src/index.js*
-```
+
+```js
 const cervezas = require('./cervezas.json');
 module.exports = {
   todas: cervezas
 };
 ```
+
 - Abrimos una consola y comprobamos que funcione nuestra librería:
-```
+
+```js
 node
 > const cervezas = require('./index.js')
 undefined
@@ -157,18 +174,21 @@ undefined
 
 
 ## Estilo de código
+
 - Puede que colabore más gente en nuestra librería
   - Queremos un estilo uniforme
 - Y si nos detecta fallos mejor
 
 - Instalaremos eslint (*D* o *--save-dev*)
-  ```
+
+  ```js
   npm i -D eslint
   ```
 
 
 ## Configuración de eslint
-```
+
+```bash
 $ node_modules/.bin/eslint --init
 ? How would you like to configure ESLint? 
   Use a popular style guide
@@ -182,10 +202,12 @@ $ node_modules/.bin/eslint --init
 
 
 ## Análisis configuración
+
 - Debemos cambiar nuestro código de src/index.js
 - *.eslintrc.json* tiene la configuración de nuestro linter
 - [Podríamos modificarla](https://eslint.org/docs/rules/), por ej:
-```
+
+```json
 {
     "extends": "standard",
     "rules": {
@@ -197,6 +219,7 @@ $ node_modules/.bin/eslint --init
     }
 }
 ```
+
 - Ayuda: Pulsa *CTRL + espacio* para autocompletado
 
 
@@ -207,7 +230,7 @@ $ node_modules/.bin/eslint --init
 - Visual Code da sugerencias por ejemplo para cambiar el tipo de módulos de Node.JS (CommonJs, síncrono) a ES6 Modules (asíncrono). 
   - [No nos interesan](https://nodejs.org/api/esm.html)
 
-```
+```json
   "prettier.eslintIntegration": true,
   "eslint.autoFixOnSave": true, //podríamos usar prettier-eslint
   "javascript.suggestionActions.enabled": false
@@ -215,7 +238,8 @@ $ node_modules/.bin/eslint --init
 
 
 - Observa que prettier tiene unas configuraciones por defecto:
-  ```
+
+  ```json
     // Whether to add a semicolon at the end of every line
     "prettier.semi": true,
 
@@ -229,11 +253,14 @@ $ node_modules/.bin/eslint --init
 
 ## Obtener una cerveza al azar:
 - Instalamos el paquete [uniqueRandomArray](https://www.npmjs.com/package/unique-random-array)
-```
+
+```bash
 npm i -S unique-random-array
 ```
+
 - Configuramos nuestro fuente:
-```
+
+```js
 const cervezas = require('./cervezas.json')
 const uniqueRandomArray = require('unique-random-array')
 module.exports = {
@@ -248,12 +275,14 @@ module.exports = {
 ## Subir a GitHub
 
 - **.gitignore** no sincroniza **node_modules**:
-  ```
+
+  ```bash
   $ du -sh node_modules
   43M	node_modules
   ```
 
 - Subir a GitHub ( o desde el editor de código):
+
   ```bash
   git status # node_module no debería estar
   git add -A
@@ -265,43 +294,58 @@ module.exports = {
 
 
 ## Publicar en npm
-```
-npm publish
-```
+
+- Mediante consola:
+
+  ```bash
+  npm publish
+  ```
+
 - Podemos comprobar la información que tiene npm de cualquier paquete mediante
-```
-npm info <nombre paquete>
-```
+
+  ```bash
+  npm info <nombre paquete>
+  ```
 
 
 ## Probar librería
+
 - Creamos un nuevo proyecto e instalamos nuestra librería
 - Creamos un index para utilizarla:
-```
+
+```js
 var cervezas = require('cervezas')
 console.log(cervezas.alazar())
 console.log(cervezas.todas)
 ```
+
 - Ejecutamos nuestro fichero:
-```
+
+```bash
 node index.js
-```
 
 
 ## Versiones en GitHub
+
 - Nuestro paquete tiene la versión 1.0.0 en npm
 - Nuestro paquete no tiene versión en GitHub, lo haremos mediante el uso de etiquetas:
-```
+
+```bash
+
 git tag v1.0.0
 git push --tags
+
 ```
+
 - Comprobamos ahora que aparece en la opción Releases y que la podemos modificar.
 - También aparece en el botón de seleccionar branch, pulsando luego en la pestaña de tags.
 
 
 ## Modificar librería
+
 - Queremos mostrar las cervezas ordenadas por nombre
 - Utilizaremos la **librería lodash** (navaja suiza del js):
+
 ```js
 var cervezas = require('./cervezas.json');
 var uniqueRandomArray = require('unique-random-array');
@@ -314,6 +358,7 @@ module.exports = {
 
 
 ## Actualizar repos
+
 - Hemos hecho un cambio **minor**. Tenemos que:
   - Cambiar la versión a 1.1.0 (semver) de nuestro proyecto (*package.json*)
   - Publicar el paquete de nuevo
@@ -321,17 +366,21 @@ module.exports = {
 
 
 ## Versiones beta
+
 - Vamos a añadir una cerveza nueva, pero todavía no se está vendiendo.
 - Aumentamos nuestra versión a 1.2.0-beta.0 (nueva funcionalidad, pero en beta)
 - Al subirlo a npm:
-```
-npm publish --tag beta
-```
+
+  ```bash
+  npm publish --tag beta
+  ```
+
 - Con npm info podremos ver un listado de nuestras versiones (¡mirá las dist-tags)
 - Para instalar la versión beta:
-```
-npm install <nombre paquete>@beta
-```
+
+  ```bash
+  npm install <nombre paquete>@beta
+  ```
 
 
 ## Jest Tests
@@ -383,49 +432,56 @@ collectCoverageFrom: ['src/*js'],
 ¡No me funciona! ????
 
 ## Tests
+
 - Utilizaremos **Mocha** y **Chai**
 - Las instalaremos como dependencias de desarrollo:
-```
-npm i -D mocha chai
-```
+
+  ```bash
+  npm i -D mocha chai
+  ```
+
 - Añadimos el comando para test en el package.json (-w para que observe):
-```
-"test": "mocha src/index.test.js -w"
-```
+
+  ```bash
+  "test": "mocha src/index.test.js -w"
+  ```
+
 - Creamos un fichero src/index.test.js con las pruebas
-```
+
+```js
 var expect = require('chai').expect;
 describe('cervezas', function () {
-it('should work!', function (done) {
-expect(true).to.be.true;
-done();
-});
+  it('should work!', function (done) {
+    expect(true).to.be.true;
+    done();
+  });
 });
 ```
+
 - Utiliza los paquetes **Mocha Snippets** y **Chai Completions** de Sublime Text para completar el código
 - Ahora prepararemos una estructura de tests algo más elaborada:
 
-```
+```js
 var expect = require('chai').expect;
 var cervezas = require('./index');
 
 describe('cervezas', function () {
-describe('todas', function () {
-it('Debería ser un array de objetos', function (done) {
-// se comprueba que cumpla la condición de ser array de objetos
-done();
-});
-it('Debería incluir la cerveza Ambar', function (done) {
-// se comprueba que incluya la cerveza Ambar
-done();
-});
-});
-describe('alazar', function () {
-it('Debería mostrar una cerveza de la lista', function (done) {
-//
-done();
-});
-});
+  describe('todas', function () {
+    it('Debería ser un array de objetos', function (done) {
+    // se comprueba que cumpla la condición de ser array de objetos
+    done();
+    });
+    it('Debería incluir la cerveza Ambar', function (done) {
+    // se comprueba que incluya la cerveza Ambar
+    done();
+    });
+  });
+  describe('alazar', function () {
+    it('Debería mostrar una cerveza de la lista', function (done) {
+    //
+    done();
+    });
+  });
 });
 ```
 
@@ -468,6 +524,7 @@ done();
 
 
 ## Automatizar tareas
+
 - Cada vez que desarrollamos una versión de nuestra libería:
 - Ejecutar los tests
 - Hay que realizar un commit
@@ -481,15 +538,16 @@ done();
 
 
 ## Instalación Semantic Release
+
 - Paso previo (en Ubuntu 14.04, si no fallaba la instalación):
-```
-sudo apt-get install libgnome-keyring-dev
-```
+  ```bash
+  sudo apt-get install libgnome-keyring-dev
+  ```
 - Instalación y configuración:
-```
-sudo npm i -g semantic-release-cli
-semantic-release-cli setup
-```
+  ```bash
+  sudo npm i -g semantic-release-cli
+  semantic-release-cli setup
+  ```
 
 - **.travis.yml**: contiene la configuración de Travis
 - Cambios en package.json:
@@ -506,54 +564,57 @@ semantic-release-cli setup
 
 
 ## Uso de commitizen
+
 - **commitizen** que nos ayudará en la generación de los mensajes de los commit.
 - La instalación, siguiendo su [documentación](https://www.npmjs.com/package/commitizen):
-```
-sudo npm install commitizen -g
-commitizen init cz-conventional-changelog --save-dev --save-exact
-```
+
+  ```bash
+  sudo npm install commitizen -g
+  commitizen init cz-conventional-changelog --save-dev --save-exact
+  ```
 
 - Habrá que ejecutar **git cz** en vez de **git commit** para que los commits los gestione commitizen
 
 
 ## Cambio de versión
+
 - Vamos a comprobar nuestro entorno añadiendo una funcionalidad
 - Si pedimos cervezas.alazar() queremos poder recibir más de una
 - Los tests:
-```
-it('Debería mostrar varias cervezas de la lista', function (done) {
-var misCervezas = cervezas.alazar(3);
-expect(misCervezas).to.have.length(3);
-misCervezas.forEach(function(cerveza){
-expect(cervezas.todas).to.include(cerveza);
-});
-done();
-});
-```
+  ```js
+  it('Debería mostrar varias cervezas de la lista', function (done) {
+  var misCervezas = cervezas.alazar(3);
+  expect(misCervezas).to.have.length(3);
+  misCervezas.forEach(function(cerveza){
+  expect(cervezas.todas).to.include(cerveza);
+  });
+  done();
+  });
+  ```
 
 - Añadimos la funcionalidad en el *src/index.js*:
-```
+
+```js
 var cervezas = require('./cervezas.json');
 var uniqueRandomArray = require('unique-random-array');
 var _ = require('lodash');
 var getCerveza = uniqueRandomArray(cervezas)
 module.exports = {
-todas: _.sortBy(cervezas, ['nombre']),
-alazar: alazar
+  todas: _.sortBy(cervezas, ['nombre']),
+  alazar: alazar
 }
 
 function alazar(unidades) {
-if (unidades===undefined){
-return getCerveza();
-} else {
-var misCervezas = [];
-for (var i = 0; i<unidades; i++) {
-misCervezas.push(getCerveza());
+  if (unidades===undefined){
+    return getCerveza();
+  } else {
+      var misCervezas = [];
+      for (var i = 0; i<unidades; i++) {
+        misCervezas.push(getCerveza());
+      }
+      return misCervezas;
+  }
 }
-return misCervezas;
-}
-}
-
 ```
 
 - Hagamos ahora el git cz & git push y veamos como funciona todo
@@ -561,6 +622,7 @@ return misCervezas;
 
 
 ## Git Hooks
+
 - Son una manera de ejecutar scripts antes de que ocurra alguna acción
 - Sería ideal pasar los tests antes de que se hiciera el commit
 - Los Git Hooks son locales:
@@ -581,6 +643,7 @@ npm i -D ghooks
 
 
 ## Coverage
+
 - Nos interesa que todo nuestro código se pruebe mediante tests.
 - Necesitamos una herramienta que compruebe el código mientras se realizan los tests:
 ```
@@ -597,38 +660,40 @@ istanbul cover -x *.test.js _mocha -- -R spec src/index.test.js
 
 
 ## Check coverage
+
 - Podemos también evitar los commits si no hay un porcentaje de tests óptimo:
-```
-"pre-commit": "npm test && npm run check-coverage"
-```
+  ```json
+  "pre-commit": "npm test && npm run check-coverage"
+  ```
 - Creamos el script check-coverage dentro del package.json:
-```
-"check-coverage": "istanbul check-coverage --statements 100 --branches 100 --functions 100 -lines 100"
-```
+  ```json
+  "check-coverage": "istanbul check-coverage --statements 100 --branches 100 --functions 100 -lines 100"
+  ```
 - Podemos comprobar su ejecución desde el terminal mediante *npm run check-coverage* y añadir una función nueva sin tests, para comprobar que el check-coverage no termina con éxito.
 - Lo podemos añadir también en Travis, de modo que no se haga una nueva release si no hay ciertos estándares (el test si lo hace por defecto):
-```
-script:
-- npm run test
-- npm run check-coverage
-```
+  ```yml
+  script:
+  - npm run test
+  - npm run check-coverage
+  ```
 
 
 ## Gráficas
+
 - Utilizaremos la herramienta codecov.io:
-```
-npm i -D codecov.io
-```
+  ```bash
+  npm i -D codecov.io
+  ```
 - Crearemos un script que recoge los datos de istanbul:
-```
-"report-coverage": "cat ./coverage/lcov.info | codecov"
-```
+  ```json
+  "report-coverage": "cat ./coverage/lcov.info | codecov"
+  ```
 - Lo añadimos en travis de modo que genere un reporte:
-```
-after success:
-- npm run report-coverage
-- npm run semantic-release
-```
+  ```yml
+  after success:
+  - npm run report-coverage
+  - npm run semantic-release
+  ```
 
 - Integrado con github (chrome extension)
 - Por último podemos añadir etiquetas de muchos servicios: npm, codecov, travis... una fuente habitual es http://www.shields.io

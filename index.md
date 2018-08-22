@@ -8,10 +8,16 @@ Septiembre 2018
 ## Acceso al curso
 
 - [Contenido curso en GitHub](https://github.com/juanda99/curso-node-js)
-- [Contenido vía web]
+- Contenido vía web:
+
+```bash
+git clone https://github.com/juanda99/curso-node-js.git .
+npm install
+npm start
+```
 
 
-## Ponente:
+## Ponente
 
 - Juan Daniel Burró Aláez (juandacorreo@gmail.com)
   - Profesor informática en CPIFP Los Enlaces
@@ -22,7 +28,7 @@ Septiembre 2018
 
 
 
-# Temario del curso
+## Temario del curso
 
 
 ## Como empezar con Node.js
@@ -43,7 +49,7 @@ Septiembre 2018
 
 
 ## Crear scripts de servidor mediante node
-- Aprender a manejar la naturaleza asíncrona de node: callbacks, promosas, async-await
+- Aprender a manejar la naturaleza asíncrona de node: callbacks, promesas, async-await
 - Uso de paquetes relacionados con el sistemas de ficheros
 - Configuración de microservicios
 
