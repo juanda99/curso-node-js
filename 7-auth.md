@@ -1,5 +1,3 @@
-
-
 ## Conceptos
 
 - Cuentas de usuario
