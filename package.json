@@ -12,6 +12,7 @@
     "web": "reveal-md index.md --static --static-dirs=img",
     "api": "reveal-md --css style.css ./6-api.md",
     "9": "reveal-md --css style.css ./9-promises.md",
+    "7": "reveal-md --css style.css ./7-auth.md",
     "print": "reveal-md --theme white index.md --print index.pdf"
   },
   "repository": {

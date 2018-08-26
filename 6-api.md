@@ -62,9 +62,6 @@
 - Es una herramienta muy extendida
 
 
-  VALIDATORS, TYPES, AND DEFAULTS...??????
-
-
 ## Comprobación API inicial
 
 - Arranca la aplicación y comprueba su funcionamiento mediante [Postman](https://www.getpostman.com/)
@@ -89,20 +86,21 @@ console.log('API escuchando en el puerto ' + port)
 ```
 
 
+
 ## Añadir rutas en API
 
-- Añade la ruta **POST /cervezas** al código server.js:
+- Añade la ruta **POST /cervezas** con respuesta:
   ```json
   { "mensaje": "Cerveza guardada" }
   ```
-- Añade la ruta **DELETE /cervezas** al código server.js:
+- Añade la ruta **DELETE /cervezas** con respuesta:
   ```json
   { "mensaje": "Cerveza borrada" }
   ```
-  - Muestra el mensaje *API escuchando en el puerto 8080* **justo cuando se levante el puerto**
+- Muestra el mensaje *API escuchando en el puerto 8080* **justo cuando se levante el puerto**
 
 - Comprueba funcionamiento mediante [Postman](https://www.getpostman.com/)
-- 
+
 - Podemos utilizar la extensión [ExpressSnippet](https://marketplace.visualstudio.com/items?itemName=vladmrnv.expresssnippet) para autocompletado.
 
 
@@ -140,7 +138,7 @@ console.log('API escuchando en el puerto ' + port)
 ## Uso de enrutadores
 
 - Normalmente una API:
-  - Tiene varios recursos (múltiples endpoints)
+  - Tiene varios recursos (cada uno con múltiples endpoints)
   - Sufre modificaciones -> mantener versiones
 
 - Asociamos enrutadores a la app en vez de rutas:
@@ -258,7 +256,8 @@ module.exports = router
   - Se recogerán mediante:
 
   ```bash
-  req.param.nombreVariable
+  req.params.nombreVariable
+  req.query.nombreVariable
   ```
 
 - **Mediante post** en http hay dos posiblidades:
@@ -270,9 +269,30 @@ module.exports = router
 
 - Vamos a mandar un parámetro *nombre* a nuestra api, de modo que nos de un saludo personalizado.
 
+```bash
+GET http://localhost:8080/pepito
+```
+
 ```js
 app.get('/:nombre', (req, res) => {
   res.json({ mensaje: '¡Hola' + req.params.nombre })
+})
+```
+
+- La variable podría acabar en ? (parámetro opcional)
+
+
+- Si mandamos una url del tipo:
+
+```bash
+GET http://localhost:8080/api?nombre=pepito
+```
+
+- El parámetro se recoge mediante *req.query*:
+
+```js
+app.get('/', (req, res) => {
+  res.json({ mensaje: '¡Hola' + req.query.nombre })
 })
 ```
 
@@ -289,7 +309,7 @@ app.get('/:nombre', (req, res) => {
 
 ## Ejemplo con body-parser
 
-- Hay que instalar body-parser
+- Hay que instalar body-parser@1.18.3
 
   ```bash
   npm i -S body-parser
@@ -328,33 +348,37 @@ app.get('/:nombre', (req, res) => {
 ```js
   var router = require('express').Router()
   router.get('/search', (req, res) => {
-    res.json({ message: 'Vas a buscar una cerveza' })
-  })
+    res.json({ message: `Vas a buscar una cerveza que contiene ${req.query.q}` })
+  }) // ¡¡¡¡antes que la ruta GET /:id!!!!
   router.get('/', (req, res) => {
     res.json({ message: 'Estás conectado a la API. Recurso: cervezas' })
   })
   router.get('/:id', (req, res) => {
-    res.json({ message: 'Vas a obtener la cerveza con id ' + req.params.id })
+    res.json({ message: `Vas a obtener la cerveza con id ${req.params.id}` })
   })
   router.post('/', (req, res) => {
     res.json({ message: 'Vas a añadir una cerveza' })
   })
   router.put('/:id', (req, res) => {
-    res.json({ message: 'Vas a actualizar la cerveza con id ' + req.params.id })
+    res.json({ message: `Vas a actualizar la cerveza con id ${req.params.id}` })
   })
   router.delete('/:id', (req, res) => {
-    res.json({ message: 'Vas a borrar la cerveza con id ' + req.params.id})
+    res.json({ message: `Vas a borrar la cerveza con id ${req.params.id}`)
   })
   module.exports = router
 ```
 
 
+
 ## Arquitectura API
 
+- Se han definido recursos
+  - Cada recurso se asocia a un enrutador
+  - A cada enrutador se asocian las rutas del recurso
+
 - Desarrollaremos una **arquitectura MVC**
-  - Tenemos ya definidas las rutas
   - Cada ruta se gestiona por un controlador
-  - El modelo se utiliza un ODM (Mongoose para MongoDB)
+  - Para el modelo se utiliza un ODM (Mongoose para MongoDB)
   - La vista son los JSON :-)
 
 
@@ -388,12 +412,12 @@ app.get('/:nombre', (req, res) => {
   
 - [Docker ya está instalado](./configuracion-inicial.md)
 
-- [Otra opción sería utilizar utilizando repositorios o paquetes](https://www.mongodb.com/)
+- [Otra opción más tradicional sería usar repositorios o paquetes](https://www.mongodb.com/)
 
 
 ## Fichero de instalación mediante docker
 
-- Utilizaremos un fichero docker-compose.yml
+- Definiremos un fichero *docker-compose.yml*
 - Para ver que imagen necesitamos podemos consultar en el [docker hub](https://hub.docker.com/)
 
 ```yml
@@ -423,6 +447,7 @@ services:
     docker-compose exec mongodb bash
     mongo
     ```
+    - O mediante *attach shell* de la extensión Docker de Visual Editor
   - Podemos ver:
     - Los ejecutables de MongoDB en el contenedor
     - El volumen mapeado...
@@ -471,11 +496,7 @@ services:
 
 ## Inserción de datos
 
-- Utilizaremos el fichero *cervezas.json*, lo podemos obtener mediante:
-
-```bash
-wget https://raw.githubusercontent.com/juanda99/proyecto_web_basica/master/cervezas.json
-```
+- Utilizaremos el fichero *cervezas.json*, de la carpeta data
 
 - Importar nuestro cervezas.json a una base de datos
 
@@ -483,10 +504,16 @@ wget https://raw.githubusercontent.com/juanda99/proyecto_web_basica/master/cerve
 mongoimport --db web --collection cervezas --drop --file cervezas.json --jsonArray
 ```
 
+- Otra opción es mediante Robomongo:
+
+```js
+  db.getCollection('cervezas').insertMany(array de objetos)
+```
+
 
 - Para hacer una búsqueda por varios campos de texto, tendremos que hacer un índice:
 
-  ```js
+```js
   $ mongo # para entrar en la consola de mongo
   use web; #seleccionamos la bbdd
   db.cervezas.createIndex(
@@ -505,12 +532,6 @@ mongoimport --db web --collection cervezas --drop --file cervezas.json --jsonArr
 
   ```js
   db.cervezas.getIndexes()
-  ```
-
-- Si hiciera falta, lo podemos recrear:
-
-  ```js
-  db.cervezas.dropIndex("CervezasIndex")
   ```
 
 
@@ -540,37 +561,32 @@ mongoimport --db web --collection cervezas --drop --file cervezas.json --jsonArr
 
 - Creamos el fichero *app/db.js* donde configuraremos nuestra conexión a base de datos mediante mongoose:
 
-  ```js
-  // incluimos Mongoose y abrimos una conexión
-  const mongoose = require('mongoose')
+```js
+const mongoose = require('mongoose')
 
-  const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27005/web'
-  mongoose.connect(MONGO_URL)
+const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27005/web'
+mongoose.connect(MONGO_URL, { useNewUrlParser: true })
 
-  mongoose.connection.on('connected', () => {
-    console.log(`Conectado a la base de datos: ${MONGO_URL}`)
+mongoose.connection.on('connected', () => {
+  console.log(`Conectado a la base de datos: ${MONGO_URL}`)
+})
+
+mongoose.connection.on('error', (err) => {
+  console.log(`Error al conectar a la base de datos: ${err}`)
+})
+
+mongoose.connection.on('disconnected', () => {
+  console.log('Desconectado de la base de datos')
+})
+
+process.on('SIGINT', function() {
+  mongoose.connection.close(function () {
+    console.log('Desconectado de la base de datos al terminar la app')
+    process.exit(0)
   })
+})
+```
 
-  mongoose.connection.on('error', (err) => {
-    console.log(`Error al conectar a la base de datos: ${err}`)
-  })
-
-
-  mongoose.connection.on('disconnected', () => {
-    console.log('Desconectado de la base de datos')
-  })
-
-  process.on('SIGINT', function() {
-    mongoose.connection.close(function () {
-      console.log('Desconectado de la base de datos al terminar la app')
-      process.exit(0)
-    })
-  })
-  ```
-
-
-- Comprobar porque lo cambiaen en doc:
-- db.on('error', console.error.bind(console, 'connection error:'));
 
 - En nuestro fichero *app/server.js* incluimos el fichero de configuración de bbdd:
 
@@ -585,7 +601,6 @@ require('./db')
 - La conexión a bbdd se queda abierta durante todo el funcionamiento de la aplicación: 
   - Las conexiones TCP son caras en tiempo y memoria
   - Se reutiliza
-
 
 
 ## Modelos
@@ -631,12 +646,57 @@ module.exports = Cerveza
 
 ## Uso de controladores
 
-- Desde nuestro fichero de rutas (*app/routes/cervezas.js*), llamaremos a un  controlador que será el encargado de añadir, borrar o modificar cervezas en base al modelo anterior.
-- Nuestro código queda así perfectamente separado y cada fichero de rutas se encargará solo de gestionar los endpoints de nuestra API para el recurso en cuestión.
+- Desde nuestro fichero de rutas (*app/routes/cervezas.js*), se llama a un controlador, encargado de añadir, borrar o modificar cervezas usando el modelo Cerveza.
+- **Endpoint -> Recurso -> Fichero de rutas -> Controlador -> Modelo**
 
 
-- Creamos un directorio específico para los controladores, donde colocaremos el específico para las cervezas.
-- Nuestro código quedas así (fichero *app/controllers/cervezasController.js*):
+- Creamos un directorio específico para los controladores (*app/controllers*)
+- Un controlador específico para cada recurso, por ej.  (*app/controllers/cervezasController.js*):
+- Un método en el controlador por cada endpoint del recurso
+
+
+## Repaso de nuestra API
+
+![](IMG/rutas-api.png)
+
+
+## Configuración final del router Cervezas
+
+```js
+var router = require('express').Router()
+var cervezasController = require ('../controllers/cervezasController')
+
+router.get('/search', (req, res) => {
+  cervezasController.search(req, res)
+})
+router.get('/', (req, res) => {
+  cervezasController.list(req, res)
+})
+router.get('/:id', (req, res) => {
+  cervezasController.show(req, res)
+})
+router.post('/', (req, res) => {
+  cervezasController.create(req, res)
+})
+router.put('/:id', (req, res) => {
+  cervezasController.update(req, res)
+})
+router.delete('/:id', (req, res) => {
+  cervezasController.remove(req, res)
+})
+module.exports = router
+```
+
+
+## Configuración del controlador Cervezas
+
+- Debemos definir los métodos siguientes:
+  - search
+  - list
+  - show
+  - create
+  - update
+  - remove
 
 ```js
 var Cervezas = require('../models/Cervezas')
@@ -754,32 +814,7 @@ module.exports = {
 ```
 
 
-- El router que gestiona el recurso se encarga de llamarlo (fichero *app/routes/cervezas.js*):
 
-  ```js
-  var router = require('express').Router()
-  var cervezasController = require ('../controllers/cervezasController')
-
-  router.get('/search', (req, res) => {
-    cervezasController.search(req, res)
-  })
-  router.get('/', (req, res) => {
-    cervezasController.list(req, res)
-  })
-  router.get('/:id', (req, res) => {
-    cervezasController.show(req, res)
-  })
-  router.post('/', (req, res) => {
-    cervezasController.create(req, res)
-  })
-  router.put('/:id', (req, res) => {
-    cervezasController.update(req, res)
-  })
-  router.delete('/:id', (req, res) => {
-    cervezasController.remove(req, res)
-  })
-  module.exports = router
-  ```
 
 
 ### Test desde el navegador o mediante Postman

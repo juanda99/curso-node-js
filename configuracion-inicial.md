@@ -16,8 +16,10 @@
 
 - Chrome
 - Postman
+- Robomongo
 - Guake
 - Visual Code Editor
+
 
 
 ## Lista de paquetes instalados
@@ -48,6 +50,13 @@ sudo apt-get install google-chrome-stable
 
 ```bash
 snap install postman
+```
+
+
+## Instalación de postman
+
+```bash
+snap install robomongo
 ```
 
 
@@ -326,7 +335,7 @@ $ git config --list
 
 - Archivo, Preferencias, Configuración:
 
-  ```
+  ```json
   "editor.tabSize": 2
   ```
 
@@ -401,3 +410,8 @@ $ git config --list
 
 - Para autocompletado de promesas
 - Se disparan con *promise*
+
+
+## [Docker](https://marketplace.visualstudio.com/items?itemName=PeterJausovec.vscode-docker)
+
+- Para gestionar contenedores e imágenes de docker

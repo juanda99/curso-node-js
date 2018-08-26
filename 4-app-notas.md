@@ -1,4 +1,4 @@
-# Aplicación de gestión de notas
+# Proyecto 4: Aplicación de gestión de notas
 
 ## Tiempo estimado: 150 minutos
 

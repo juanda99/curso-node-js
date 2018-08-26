@@ -512,7 +512,7 @@ convertCurrency('USD', 'USD', 20).then((message) => {
 })
 ```
 
-## Problema d scope
+## Problema de scope
 
 - Para devolver el mensaje hay variables que están fuera del scope
 - Ya nos pasó al hacer la suma de números de ficheros... ¿sabrías solucionarlo?
