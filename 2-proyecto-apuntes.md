@@ -8,7 +8,6 @@
 - *Generación de slides y pdf a partir de markdown, útil para hacer apuntes*
 
 
-
 ## Objetivos
 
 - Uso de un **módulos de terceros**
@@ -19,6 +18,8 @@
 ## Descargar ficheros
 
 - [Descargar zip desde GitHub](https://github.com/juanda99/apuntes-markdown)
+
+![](img/zip-github.png)
 
 
 ## Inicializar proyecto
@@ -83,19 +84,49 @@
 ## Ejecución de scripts
 
 - Mediante el comando:
-  ```
+
+  ```bash
   npm run <script-name>
   ```
+
 - Algunos se pueden "acortar":
-  ```
+  
+  ```bash
   npm start
   npm run print
   ```
+
 - reveal-md es un ejecutable que se ha instalado en *node_modules/.bin/reveal-md*
 - Ese directorio está siempre en el PATH al ejecutar un script de un *package.json*
 
 
+## Ejercicio
 
-# ¿Continuamos?
+- Modifica el fichero *api-rest.md* o la configuración de *reveal-md* para que:
+  - Se visualicen las diapositivas de una en una (sin cortes)
+
+
+## Soluciones posibles
+
+- Por defecto, las diapositivas se pueden separar así:
+
+```bash
+Override slide separator (default: \n---\n):
+reveal-md slides.md --separator "^\n\n\n"
+
+Override vertical/nested slide separator (default: \n----\n):
+reveal-md slides.md --vertical-separator "^\n\n" 
+```
+
+- Otra opción es mediante un fichero *reveal-md.json*:
+```js
+{
+  "separator": "^\n\n\n",
+  "verticalSeparator": "^\n\n"
+}
+```
+
+
+## ¿Continuamos?
 
 - [Cómo crear una librería en Node.js](./3-proyecto-libreria.md)

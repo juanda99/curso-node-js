@@ -8,27 +8,24 @@
 - *Generación de una lista de notas con almacenamiento mediante json y ficheros*
 
 
-
 ## Objetivos
 
-- Repaso de lo anterior
+- Repaso de lo visto en proyectos anteriores
 - Usar objetos JSON
   - Serializar
   - Deserializar
-- Uso de fork en GitHub
 
 
 
 ## Empezamos proyecto
 
 
-## Crear proyecto
+## Pasos previos
 
-- Fork del proyecto juanda99/notas
-- Clone del mismo
-- Pasos iguales a la práctica anterior
-- Configuración del linter
-  - Podría estar ya configurado en el repo original
+- Pasos similares a la práctica anterior
+  - [Fork del proyecto](https://github.com/juanda99/curso-node-js-proyecto-notas)
+  - Clone al equipo local
+  - Configuración del linter
 - Vemos capturas de la práctica anterior
 
 
@@ -69,11 +66,11 @@ git clone <url proyecto>
   cd <url proyecto>
   npm init
 ```
+
 - package_name debe ser único: **no puede haber dos proyectos con el mismo nombre en npm**
 - El *entry-point* lo pondremos en *src/index.js*, así separaremos nuesto código fuente de los tests.
 - El resto de parámetros con sus valores por defecto
 - ¡Ya tenemos nuestro **package.json** creado!
-
 
 
 ## Estilo de código
@@ -83,7 +80,7 @@ git clone <url proyecto>
 - Y si nos detecta fallos mejor
 
 - Instalaremos eslint (*D* o *--save-dev*)
-  
+
   ```bash
   npm i -D eslint
   ```
@@ -93,13 +90,13 @@ git clone <url proyecto>
 
 ```bash
 $ node_modules/.bin/eslint --init
-? How would you like to configure ESLint? 
+? How would you like to configure ESLint?
   Use a popular style guide
-? Which style guide do you want to follow? 
+? Which style guide do you want to follow?
   Standard
-? What format do you want your config file to be in? 
+? What format do you want your config file to be in?
   JSON
-? Would you like to install them now with npm? 
+? Would you like to install them now with npm?
   Yes
 ```
 
@@ -136,9 +133,10 @@ module.exports.addNote = function () {
 ```
 
 - *app.js* hace el require del módulo y lo almacena en una variable
+
 ```
-const agenda = require('notas')
-const resultado = notas.addNote()
+const notas = require('notas')
+const notaAñadida = notas.addNote()
 ```
 
 - ¿Sabrías crear la función removeNote?
@@ -148,55 +146,38 @@ const resultado = notas.addNote()
 
 - Notas.js:
 
-  ```js
-  module.exports.removeNote = function (id) {
-    console.log(`Nota borrada id=${id}`)
-    return 'Nota borrada'
-  }
-  ```
+```js
+module.exports.removeNote = function (id) {
+  console.log(`Nota borrada con id=${id}`)
+  return 'Nota borrada'
+}
+```
 
 - app.js
 
-  ```js
-  const addNote = () => {}
-  module.exports = { addNote, removeNote }
-  ```
+```js
+const notas = require('notas')
+const notaAñadida = notas.addNote()
+const notaEliminada = notas.removeNote(5)
+```
+
 
 ## Repaso ES6
 
-- Object Literal Property Value Shorthand
 - Arrow functions
+- Object Literal Property Value Shorthand
 
-
-## ES6: Object Literal Property Value Shorthand
-
-- Antes (ES5):
-
-  ```js
-  function createMonster(name, power) {
-    return { type: 'Monster', name: name, power: power };
-  }
-  ```
-
-
-- Ahora (ES6):
-
-  ```js
-  function createMonster(name, power) {
-    return { type: 'Monster', name, power };
-  }
-  ```
 
 ## Arrow functions
 
 ```js
-const sumarNumeros =  function (a, b) { return a+b }
-const sumarNumerosES6 = (a, b) => { return a +b }
-const sumarNumerosES6bis = (a, b) => a +b
+const sumarNumeros =  function (a, b) { return a + b }
+const sumarNumerosES6 = (a, b) => { return a + b }
+const sumarNumerosES6bis = (a, b) => a + b
 ```
 
 
-## Sintaxia Arrow functions
+## Sintaxis Arrow functions
 
 - Sintaxis general:
 
@@ -210,17 +191,54 @@ const sumarNumerosES6bis = (a, b) => a +b
   (param1, param2, …, paramN) => expression
   ```
 
-- Si no hay parámetros, los paréntesis son obligatorios:
+- Si no hay parámetros, paréntesis obligatorios:
 
   ```js
   () => { statements }
   ```
 
-- Si solo hay un parámetro, los parámetros son opcionales:
+- Si solo hay un parámetro, parámetros opcionales:
 
   ```js
   singleParam => { statements }
   ```
+
+
+## ES6: Object Literal Property Value Shorthand
+
+- Antes (ES5):
+
+```js
+function createMonster(name, power) {
+  return { type: 'Monster', name: name, power: power }
+}
+```
+
+- Ahora (ES6):
+
+```js
+function createMonster(name, power) {
+  return { type: 'Monster', name, power }
+}
+```
+
+
+- Y con arrow functions:
+
+```js
+const createMonster = (name, power) =>  ({ type: 'Monster', name, power })
+}
+```
+
+- Esta opción no sería correcta:
+  - El compilador piensa que hay un block statement, y no un objeto
+  - Retorna *undefined*
+
+```js
+const createMonster = (name, power) =>  { type: 'Monster', name, power }
+}
+```
+
 
 ## Solución con ES6
 
@@ -231,7 +249,7 @@ const addNote =  () => {
 }
 const removeNote =  id => {
   console.log(`Nota borrada con id: ${id}`)
-  return 'NotaBorrada'
+  return 'Nota borrada'
 }
 module.exports = {
   addNote,
@@ -239,43 +257,27 @@ module.exports = {
 }
 ```
 
+
+
 ## Instalar módulos de terceros
 
 - Necesitamos guardar la referencia a los módulos que guardamos:
 
 ```bash
+# este comando ya lo hemos ejecutado previamente
+# y tenemos la dependencia eslint guardada
 npm init # para tener un package.json & package-lock.json
 ```
 
 - Configuraremos el script start para que ejecute nuestra aplicación
 
-# Guardar módulos de terceros
+
+## Guardar módulos de terceros
 
 - Se guardan en node_modules
-- No se deben sincronizar con GitHub (usar .gitignore)
+- No se deben sincronizar con GitHub (usar *.gitignore*)
 - Usar *npm install* para descargarlos
 
-
-## Lodash
-
-- El jQuery de node, una navaja suiza
-  - Es modular (menor tamaño), en una aplicación en servidor da igual
-  - [En un SPA instalaríamos el módulo/s que necesitásemos](https://www.npmjs.com/search?q=keywords:lodash-modularized)
-- Es uno de los [paquetes más descargados](https://www.npmjs.com/package/lodash) de npm
-- [Ver documentación](https://lodash.com/docs/)
-
-
-
-npm install --save lodash
-npm install --save-dev nodemon
-
-const _ = require('lodash)
-
-_.isString(true);
-_.uniq(array);
-
-**********
-no se cuando lo utilizaremos....
 
 ## nodemon
 
@@ -283,7 +285,7 @@ no se cuando lo utilizaremos....
 - Instalamos
 
   ```bash
-  npm install -g nodemon
+  npm install --save-dev nodemon # o más corto:
   npm i -D nodemon
   ```
 
@@ -291,16 +293,15 @@ no se cuando lo utilizaremos....
 
 
 ## Input de una aplicación
+
 - Una aplicación puede obtener el input de distintas formas:
   - Práctica socket.io
     - Mediante websockets
   - Práctica API:
     - Parámetros en URL
     - Parámetros en el header
-  - Mediante línea de comandos
-- Práctica actual
-  - Mediante línea de comandos
-
+  - Práctica actual
+    - Mediante línea de comandos
 
 
 ## Input de CLI
@@ -318,7 +319,8 @@ no se cuando lo utilizaremos....
 
 ## Ejercicio
 
-- Recoger los distintos input que puede recibir la aplicación:
+- Recoger los distintos input que puede recibir la aplicación *if-else
+*:
   - add: para añadir una nota
   - list: para sacar la lista de notas
   - read: para leer una nota en particular
@@ -326,7 +328,7 @@ no se cuando lo utilizaremos....
   - cualquier otro caso: avisar de que el comando no se reconoce
 
 
-## Solución
+## Solución con if-else
 
 ```js
 console.log('Aplicación de notas arrancada.')
@@ -345,6 +347,31 @@ if (command === 'add') {
 } else if (command === 'remove') {
   console.log('Borrando nota')
 } else {
+  console.log('Comando desconocido')
+}
+```
+
+
+## Solución con switch
+
+```js
+console.log('Aplicación de notas arrancada.')
+const notas = require('./notas')
+
+var command = process.argv[2]
+console.log('Command: ', command)
+console.log(process.argv)
+
+switch (command) {
+  case 'add':
+    console.log('Añadiendo nueva nota')
+  case 'list':
+    console.log('Listado de todas las notas')
+  case 'read'
+    console.log('Leyendo notas')
+  case 'remove'
+    console.log('Borrando nota')
+  default:
   console.log('Comando desconocido')
 }
 ```
@@ -485,14 +512,17 @@ module.exports = {
 ```
 
 ## Almacenar datos
+
 - Si se inserta una nueva nota, lo suyo sería almacenarla en algún sitio
 - Utilizamos bjetos para trabajar en nuestro código:
+
   ```js
   const nota1 = {
     title: titulo1,
     body: body1
   }
   ```
+
 - Para almacenar en ficheros debemos utilizar strings.
 - Haremos un par de ejercicios para ver si sabemos:
   - Convertir un JSON  a string (escritura de nota)
@@ -528,11 +558,11 @@ console.log(stringObj)
 
 ## Ejercicio
 
-  - Convierte el string siguiente a JSON y obten la edad:
+- Convierte el string siguiente a JSON y obten la edad:
 
-    ```js
-    var personaString = '{"nombre": "Pepe", "edad": 25}'
-    ```
+  ```js
+  var personaString = '{"nombre": "Pepe", "edad": 25}'
+  ```
 
 ## Solución: 
 
@@ -613,6 +643,7 @@ console.log(persona.edad)
   ```
 
 ## Ejercicio refactorizar
+
 - Utiliza las funciones anteriores para refactorizar el código
 - Devuelve la nota creada a *app.js* de modo que la muestre por consola
 
@@ -705,6 +736,7 @@ console.log(persona.edad)
   ```
 
 ## Ejercicio leer una nota
+
 - Implementa el método readNote en función del título de la nota
 - Si usas la función filter, ten en cuenta que siempre devuele un array
 - Refactoriza el código utilizando la función logNote:
@@ -749,6 +781,7 @@ console.log(persona.edad)
 
 
 ## Ejercicio: listado de notas
+
 - Implementa la función getAll para obtener todas las notas
 - Muestra las notas por consola desde *app.js*
 

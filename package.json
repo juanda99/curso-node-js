@@ -9,10 +9,17 @@
   "devDependencies": {},
   "scripts": {
     "start": "reveal-md --css style.css ./index.md",
+    "config": "reveal-md --css style.css ./configuracion-inicial.md",
     "web": "reveal-md index.md --static --static-dirs=img",
-    "api": "reveal-md --css style.css ./6-api.md",
-    "9": "reveal-md --css style.css ./9-promises.md",
+    "1": "reveal-md --css style.css ./1-proyecto-hola-usuario.md",
+    "2": "reveal-md --css style.css ./2-proyecto-apuntes.md",
+    "3": "reveal-md --css style.css ./3-proyecto-libreria.md",
+    "4": "reveal-md --css style.css ./4-app-notas.md",
+    "5": "reveal-md --css style.css ./5-express.md",
+    "6": "reveal-md --css style.css ./6-api.md",
     "7": "reveal-md --css style.css ./7-auth.md",
+    "8": "reveal-md --css style.css ./8-websockets.md",
+    "9": "reveal-md --css style.css ./9-promises.md",
     "print": "reveal-md --theme white index.md --print index.pdf"
   },
   "repository": {

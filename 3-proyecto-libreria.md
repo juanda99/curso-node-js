@@ -5,9 +5,9 @@
 
 ## Funcionalidad librería
 
-- Obtiene una marca de cerveza y sus características
-- Obtiene una o varias marcas de cerveza al azar.
-- Tiempo estimado: 150 minutos
+- Dada un listado de cervezas (fichero json):
+  - Obtiene una marca de cerveza y sus características
+  - Obtiene una o varias marcas de cerveza al azar.
 
 
 ## Objetivos
@@ -46,9 +46,9 @@
 - Utilizaremos git como control de versiones de nuestro proyecto
 - Utilizaremos [GitHub](https://github.com/) como servidor git en la nube
   - Crea un usuario en [GitHub](https://github.com/)  si no lo tienes
-  - Comprueba que tengas git correctamente configurado:
+  - [Comprueba que tengas git correctamente configurado](http://localhost:1948/configuracion-inicial.md#/3/11):
     ```bash
-    git config list
+    git config --list
     ```
   - Exporta tu clave pública ssh a GitHub si vas a usar ssh para hacer el sync de repositorios
 
@@ -70,7 +70,7 @@
 
 - Mediante ```npm config list``` vemos los parámetros de configuración
 
-```
+```bash
 npm set init-author-name pepe
 npm set init-author-email pepe@pepe.com
 npm set init-author-url http://pepe.com
@@ -152,7 +152,7 @@ git clone <url proyecto>
 - ¡Ya tenemos nuestro **package.json** creado!
 
 
-## Listar todas las cervezas:
+## Listar todas las cervezas
 
 - Editamos nuestro fichero *src/index.js*
 
@@ -252,6 +252,7 @@ $ node_modules/.bin/eslint --init
 
 
 ## Obtener una cerveza al azar:
+
 - Instalamos el paquete [uniqueRandomArray](https://www.npmjs.com/package/unique-random-array)
 
 ```bash
@@ -290,6 +291,7 @@ module.exports = {
   git commit -m "versión inicial"
   git push
   ```
+
 - Comprobamos desde GitHub.
 
 
@@ -323,6 +325,7 @@ console.log(cervezas.todas)
 
 ```bash
 node index.js
+```
 
 
 ## Versiones en GitHub
@@ -331,14 +334,21 @@ node index.js
 - Nuestro paquete no tiene versión en GitHub, lo haremos mediante el uso de etiquetas:
 
 ```bash
-
 git tag v1.0.0
 git push --tags
-
 ```
 
 - Comprobamos ahora que aparece en la opción Releases y que la podemos modificar.
 - También aparece en el botón de seleccionar branch, pulsando luego en la pestaña de tags.
+
+
+## Lodash
+
+- El jQuery de node, una navaja suiza
+  - Es modular (menor tamaño), en una aplicación en servidor da igual
+  - [En un SPA instalaríamos el módulo/s que necesitásemos](https://www.npmjs.com/search?q=keywords:lodash-modularized)
+- Es uno de los [paquetes más descargados](https://www.npmjs.com/package/lodash) de npm
+- [Ver documentación](https://lodash.com/docs/)
 
 
 ## Modificar librería
@@ -375,6 +385,7 @@ module.exports = {
   npm publish --tag beta
   ```
 
+
 - Con npm info podremos ver un listado de nuestras versiones (¡mirá las dist-tags)
 - Para instalar la versión beta:
 
@@ -383,57 +394,105 @@ module.exports = {
   ```
 
 
-## Jest Tests
-
-npm i -D jest
-
-  "scripts": {
-    "test": "jest"
-  },
-
-
-Inicializamos para usar node y no jsdom:
-node_modules/.bin/jest --init
-(crea elemento jest.config.js), podría ir también en el package.json
-
-Todos los elementos de tipo object no está.
-Instalamos: https://www.npmjs.com/package/jest-extended
-npm install --save-dev jest-extended
-
-Configuramos:
-jest.config.js añadimos:
-setupTestFrameworkScriptFile: 'jest-extended',
-
-Otra opción sería añadirlo antes de realizar los tests:
-require('jest-extended')
-
-
-Por ejemplo:
-https://github.com/jest-community/jest-extended#tosatisfyallpredicate
-
-
-Todas las opciones para las assertions:
-https://jestjs.io/docs/en/expect
-https://github.com/jest-community/jest-extended
-
-
- collectCoverage: true
-collectCoverageFrom: ['src/*js'],
-
-
-  "scripts": {
-    "test": "jest",
-    "test-watch": "jest --watch" 
-  },
-
-
-## Debug
-
-¡No me funciona! ????
 
 ## Tests
 
-- Utilizaremos **Mocha** y **Chai**
+
+## Tipos de tests
+
+![](img/P10_piramides_agil-qa-testing.JPG)
+
+
+## Enfoque de nuestros tests unitarios
+
+- Utilizaremos BDD (behaviour driven development)
+  - TDD (test driven development)
+  - Más legibles (mayor descripción)
+
+- Unit Testing te informa de **qué funciona**
+- Test-Driven Development te informa de **cuándo funciona**
+- Behavior Driven-Development te dice **cómo funciona**
+
+
+![](img/tdd-flowchart.png)
+
+
+## Librería de tests
+
+- Utilizaremos [**Mocha**](https://mochajs.org/) como librería de tests
+  - Es la más extendida
+  - Últimamente se utiliza mucho también **jest** (más en frontend)
+- Utilizaremos [Chai](http://www.chaijs.com/) como assertion library
+  - Mocha permite utilizar la librería de aserciones que queramos
+
+
+## Estructura de los tests
+
+- Se utiliza **describe** para definir conjuntos de tests
+  - Es un simple método de agrupación
+  - Se pueden anidar
+- Se utiliza **it** para cada uno de los tests
+
+```js
+describe('Sistema Solar', function(){
+  describe('Tierra', function(){
+    describe('España', function(){
+      it('Se habla castellano', function(){ /** ... */ })
+      it('Se conduce por la derecha', function(){ /** ... */ })
+    })
+    describe('Francia', function(){
+      it('Se habla francés', function(){ /** ... */ })
+      ...
+    })
+  })
+})
+```
+
+
+## Ejemplo de test
+
+```js
+const utils = require('./utils')
+
+it('Debería sumar dos números', () => {
+  var res = utils.add(33, 11)
+
+  if (res !== 44) {
+    throw new Error(`Resultado esperado 44, pero se ha recibido: ${res}.`)
+  }
+})
+```
+
+
+## Aserciones
+
+- Hay varios estilos.
+  - expect / should siguen el estilo BDD
+  - assert sigue el estilo TDD
+
+```js
+var assert = require('assert')
+var expect = require('chai').expect
+var should = require('chai').should()
+```
+
+- Nosotros utilizaremos expect:
+
+```js
+it('Se habla castellano', function(){
+  expect(languge).to.equal('spanish')
+})
+```
+
+## Librerías de Visual Studio Code
+
+- Para autocompletar el código de los **describe**, **it**
+- Para comprobar el estado de nuestros tests y/o monitorización
+  - Es habitual hacerlo dentro del package.json (**mocha -w**)
+
+
+## Instalación librerías tests
+
 - Las instalaremos como dependencias de desarrollo:
 
   ```bash
@@ -445,6 +504,7 @@ collectCoverageFrom: ['src/*js'],
   ```bash
   "test": "mocha src/index.test.js -w"
   ```
+
 
 - Creamos un fichero src/index.test.js con las pruebas
 
@@ -458,7 +518,7 @@ describe('cervezas', function () {
 });
 ```
 
-- Utiliza los paquetes **Mocha Snippets** y **Chai Completions** de Sublime Text para completar el código
+
 - Ahora prepararemos una estructura de tests algo más elaborada:
 
 ```js
@@ -485,53 +545,54 @@ describe('cervezas', function () {
 });
 ```
 
+
 - Por último realizamos los tests:
 
-```
+```js
 var expect = require('chai').expect;
 var cervezas = require('./index');
 var _ = require('lodash')
 
 describe('cervezas', function () {
-describe('todas', function () {
-it('Debería ser un array de objetos', function (done) {
-expect(cervezas.todas).to.satisfy(isArrayOfObjects);
-function isArrayOfObjects(array){
-return array.every(function(item){
-return typeof item === 'object';
-});
-}
-done();
-});
-it('Debería incluir la cerveza Ambar', function (done) {
-expect(cervezas.todas).to.satisfy(contieneAmbar);
-function contieneAmbar (array){
-return _.some(array, { 'nombre': 'ÁMBAR ESPECIAL' });
-}
-done();
-});
-
-});
-describe('alazar', function () {
-it('Debería mostrar un elemento de la lista de cervezas', function (done) {
-var cerveza = cervezas.alazar();
-expect(cervezas.todas).to.include(cerveza);
-done();
-});
-});
+  describe('todas', function () {
+    it('Debería ser un array de objetos', function (done) {
+      expect(cervezas.todas).to.satisfy(isArrayOfObjects);
+      function isArrayOfObjects(array){
+        return array.every(function(item){
+          return typeof item === 'object';
+        });
+      }
+      done();
+    });
+    it('Debería incluir la cerveza Ambar', function (done) {
+      expect(cervezas.todas).to.satisfy(contieneAmbar);
+      function contieneAmbar (array){
+        return _.some(array, { 'nombre': 'ÁMBAR ESPECIAL' });
+      }
+      done();
+    });
+  });
+  describe('alazar', function () {
+    it('Debería mostrar un elemento de la lista de cervezas', function (done) {
+      var cerveza = cervezas.alazar();
+      expect(cervezas.todas).to.include(cerveza);
+      done();
+    });
+  });
 });
 ```
 
 
 ## Automatizar tareas
 
-- Cada vez que desarrollamos una versión de nuestra libería:
-- Ejecutar los tests
-- Hay que realizar un commit
-- Hay que realizar un tag del commit
-- Push a GitHub
-- Publicar en npm
-- ...
+- Nueva versión de nuestra librería:
+  - Crear y ejecutar (monitorizar) los tests
+  - Añadir implementación de código
+- Una vez que los tests funcionan:
+  - Hay que realizar un commit
+  - Hay que realizar un tag del commit
+  - Push a GitHub
+  - Publicar en npm
 - Vamos a intentar automatizar todo:
 - **Semantic Release** para la gestión de versiones
 - **Travis** como CI (continuous integration)
@@ -540,10 +601,13 @@ done();
 ## Instalación Semantic Release
 
 - Paso previo (en Ubuntu 14.04, si no fallaba la instalación):
+
   ```bash
   sudo apt-get install libgnome-keyring-dev
   ```
+
 - Instalación y configuración:
+
   ```bash
   sudo npm i -g semantic-release-cli
   semantic-release-cli setup
@@ -557,6 +621,7 @@ done();
 
 
 ## Versiones del software
+
 - Utilizamos semantic versioning
 - Semantic Release se ejecuta a través de Travis CI
 - Travis CI se ejecuta al hacer un push (hay que configurarlo desde la web)
@@ -581,16 +646,18 @@ done();
 - Vamos a comprobar nuestro entorno añadiendo una funcionalidad
 - Si pedimos cervezas.alazar() queremos poder recibir más de una
 - Los tests:
+
   ```js
   it('Debería mostrar varias cervezas de la lista', function (done) {
-  var misCervezas = cervezas.alazar(3);
-  expect(misCervezas).to.have.length(3);
-  misCervezas.forEach(function(cerveza){
-  expect(cervezas.todas).to.include(cerveza);
-  });
-  done();
+    var misCervezas = cervezas.alazar(3);
+    expect(misCervezas).to.have.length(3);
+    misCervezas.forEach(function(cerveza){
+      expect(cervezas.todas).to.include(cerveza);
+    });
+    done();
   });
   ```
+
 
 - Añadimos la funcionalidad en el *src/index.js*:
 
@@ -617,7 +684,8 @@ function alazar(unidades) {
 }
 ```
 
-- Hagamos ahora el git cz & git push y veamos como funciona todo
+
+- Hagamos ahora el *git cz & git push* y veamos como funciona todo
 - Podríamos añadir un issue y hacer el fix en este commit escribiendo closes #issue en el footer del commit message.
 
 
@@ -629,15 +697,18 @@ function alazar(unidades) {
 - Si alguien hace un clone del repositorio, no tiene los GitHooks
 - Instalaremos un paquete de npm para hacer git hooks de forma universal
 
-```
+```bash
 npm i -D ghooks
 ```
+
+
 - Lo configuraremos en el package.json en base a la [documentación del paquete](https://www.npmjs.com/package/ghooks):
-```
+
+```json
 "config": {
-"ghooks": {
-"pre-commit": "npm test"
-}
+  "ghooks": {
+    "pre-commit": "npm test"
+  }
 }
 ```
 
@@ -646,13 +717,18 @@ npm i -D ghooks
 
 - Nos interesa que todo nuestro código se pruebe mediante tests.
 - Necesitamos una herramienta que compruebe el código mientras se realizan los tests:
-```
+
+```bash
 npm i -D instanbul
 ```
+
 - Modificaremos el script de tests en el package.json:
-```
+
+```bash
 istanbul cover -x *.test.js _mocha -- -R spec src/index.test.js
 ```
+
+
 - Instanbul analizará la cobertura de todos los ficheros excepto los de test ejecutando a su vez _mocha (un wrapper de mocha proporcionado por ellos) con los tests.
 - Si ejecutamos ahora *npm test* nos ofrecerá un resumen de la cobertura de nuestros tests.
 - Por último nos crea una carpeta en el proyecto *coverage* donde podemos ver los datos, por ejemplo desde un navegador (fichero index.html)
@@ -662,15 +738,21 @@ istanbul cover -x *.test.js _mocha -- -R spec src/index.test.js
 ## Check coverage
 
 - Podemos también evitar los commits si no hay un porcentaje de tests óptimo:
+
   ```json
   "pre-commit": "npm test && npm run check-coverage"
   ```
+
 - Creamos el script check-coverage dentro del package.json:
+
   ```json
-  "check-coverage": "istanbul check-coverage --statements 100 --branches 100 --functions 100 -lines 100"
+  "check-coverage": "istanbul check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
   ```
+
+
 - Podemos comprobar su ejecución desde el terminal mediante *npm run check-coverage* y añadir una función nueva sin tests, para comprobar que el check-coverage no termina con éxito.
 - Lo podemos añadir también en Travis, de modo que no se haga una nueva release si no hay ciertos estándares (el test si lo hace por defecto):
+
   ```yml
   script:
   - npm run test
@@ -681,14 +763,20 @@ istanbul cover -x *.test.js _mocha -- -R spec src/index.test.js
 ## Gráficas
 
 - Utilizaremos la herramienta codecov.io:
+
   ```bash
   npm i -D codecov.io
   ```
+
 - Crearemos un script que recoge los datos de istanbul:
+
   ```json
   "report-coverage": "cat ./coverage/lcov.info | codecov"
   ```
+
+
 - Lo añadimos en travis de modo que genere un reporte:
+
   ```yml
   after success:
   - npm run report-coverage

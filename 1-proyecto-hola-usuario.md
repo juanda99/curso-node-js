@@ -65,12 +65,36 @@ fs.appendFile('saludo.txt', 'Hola Usuario');
 ```
 
 
-- ¡Recoger error o éxito con función de callback para evitar warning!
-    ```js
-    (node:9493) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
-    ```
+- Salida con warning:
 
-- Podríamos utilizar también una función síncrona (no lo haremos)
+```js
+(node:9493) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+```
+
+- ¡Recoger error o éxito con función de callback para evitar warning!
+
+```js
+console.log('Iniciando app');
+const fs = require('fs');
+// fs es un objeto con muchas funciones, ver api
+fs.appendFile('saludo.txt', 'Hola Usuario', (err)=>{
+  err ? console.log('Ha habido un error') : console.log('Todo ok');
+});
+```
+
+
+- Podríamos utilizar también una función síncrona:
+
+```js
+console.log('Iniciando app');
+const fs = require('fs');
+try {
+  fs.appendFileSync('saludo.txt', 'Hola usuario');
+  console.log('Todo ok!');
+} catch (err) {
+  console.log('Ha habido un error');
+}
+```
 
 
 ## Obtener el nombre del usuario
@@ -78,9 +102,24 @@ fs.appendFile('saludo.txt', 'Hola Usuario');
 - Utilizaremos el módulo OS para averiguar el nombre del usuario
 
 ```js
-const os = require('os')
+const os = require('os');
 const user = os.userInfo();
 console.log(user); // para ver que datos tiene userInfo()
+```
+
+
+## Implementación ES5
+
+```js
+const fs = require('fs');
+const os = require('os');
+const user = os.userInfo();
+
+console.log('Iniciando app');
+const saludo = 'Hola ' + user.username;
+fs.appendFile('saludo.txt', saludo, function (err) {
+  err ? console.log('Ha habido un error') : console.log('Todo ok');
+});
 ```
 
 
@@ -125,33 +164,30 @@ function createMonster(name, power) {
 ```
 
 
-## Implementación ES5
-
-```js
-const fs = require('fs')
-const os = require('os')
-const user = os.userInfo()
-
-console.log('Iniciando app')
-fs.appendFile('saludo.txt', `Hola ${user.username}`)
-```
-
-
 ## Implementación ES6
 
 ```js
-const fs = require('fs')
-const os = require('os')
-const { username } = os.userInfo()
+const fs = require('fs');
+const os = require('os');
+const { username } = os.userInfo();
 
-console.log('Iniciando app')
-fs.appendFile('saludo.txt', `Hola ${username}`)
+console.log('Iniciando app');
+const saludo = `Hola ${username}`;
+fs.appendFile('saludo.txt', saludo, (err) => {
+  err ? console.log('Ha habido un error') : console.log('Todo ok');
+});
 ```
 
 
 ## require
+
 - *require* es un módulo que está en el objeto global
-- No necesitamos hacer un require('require');
+- Este código no es necesario:
+ 
+  ```js
+  require('require');
+  ```
+
 - Funciona de forma síncrona
   - Por eso se ponen al comienzo
   - Podríamos colocarlos más tarde y hacer *lazy loading*
@@ -159,7 +195,9 @@ fs.appendFile('saludo.txt', `Hola ${username}`)
 
 ## Uso de módulos
 
+- Vamos a crear un módulo que sea el encargado de proporcionarnos el usuario
 - Creamos el fichero user.js con el siguiente texto:
+  
   ```js
   console.log('Cargando módulo para el usuario');
   ```
@@ -213,11 +251,11 @@ var nombre = "juan";
 
 - El objeto module tiene muchas propiedades, nos interesará **module.exports**
 
-  ```js
-  console.log(module)
-  ```
+```js
+console.log(module)
+```
 
-- module.exports puede ser una función o un objeto.
+- module.exports puede ser una función, un objeto, un string...
 - Será ahí donde tendremos que crear un objeto con el nombre del usuario y la edad.
 
 
@@ -226,13 +264,20 @@ var nombre = "juan";
 - Fichero app.js:
   
 ```js
-const fs = require('fs')
+const fs = require('fs');
+const os = require('os');
+console.log('Iniciando app');
+
 const { username, edad } = require('./user')
-fs.appendFile('saludo.txt', `Hola ${username}, tienes ${edad} años`)
+
+const saludo = `Hola ${username}, tienes ${edad} años`;
+fs.appendFile('saludo.txt', saludo, (err) => {
+  err ? console.log('Ha habido un error') : console.log('Todo ok');
+});
 ```
 
 - Módulo user.js:
-  
+
 ```js
 const { username } = require('os').userInfo()
 const edad = 25;
@@ -240,43 +285,58 @@ module.exports = { username, edad }
 ```
 
 
-## Ejercicio
+## Ejercicio carga módulos
 
 - ¿Qué mostraría el siguiente programa?
 - ¿Y si comentamos la primera línea de app.js?
 
 app.js:
+
 ```js
-require('./module1')
-require('./module2')
-console.log('Iniciando app')
+require('./module1');
+require('./module2');
+console.log('Iniciando app');
 ```
 
 module1.js:
+
 ```js
 console.log('Ejecutando módulo 1');
 ```
 
 module2.js:
+
 ```js
 require('./module1')
 console.log('Ejecutando módulo 2');
 ```
 
 
-## Solución
+## Salida ejercicio
+
 - El texto *Ejecutando módulo 1* se muestra solo una vez
   - Ya está cargado previamente, se usa la caché y no se ejecuta
   - El texto *Inicializando app* sale después del console.log de los require (los require son síncronos).
 
 
-## Ejercicio
+## Ejercicio leer ficheros
+
 - Crea dos ficheros numero1.txt y numero2.txt y escribe un número en cada uno
-- Crea un programa que: 
+- Crea un programa que:
   - Lea el contenido de los dos fichero y lo almacene en variables
   - Muestre por consola la suma de las variables
 
 
-# ¿Y ahora qué?
+## Solución lectura ficheros
+
+```js
+const fs = require('fs')
+const numero1 = fs.readFileSync('./numero1', 'utf-8')
+const numero2 = fs.readFileSync('./numero2', 'utf-8')
+console.log(`El resultado de la suma es  ${parseInt(numero1)+parseInt(numero2)}`)
+```
+
+
+## ¿Y ahora qué?
 
 - [Proyecto apuntes en markdown](./2-proyecto-apuntes.md)

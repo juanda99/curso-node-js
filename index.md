@@ -7,8 +7,8 @@ Septiembre 2018
 
 ## Acceso al curso
 
-- [Contenido curso en GitHub](https://github.com/juanda99/curso-node-js)
-- Contenido vía web:
+- [Fuentes del curso en GitHub](https://github.com/juanda99/curso-node-js)
+- Visualización vía diapositivas:
 
 ```bash
 git clone https://github.com/juanda99/curso-node-js.git .
@@ -128,13 +128,21 @@ npm start
 - **Publicación en el repositorio de npm**
 
 
-## [Proyecto 4: Lista de tareas](./package.md)
+## [Proyecto 4: Lista de tareas](./4-app-notas.md)
 
 - *Clásico ejercicio de todo list con persistencia en fichero*
 - Uso de json.
 
 
-## [Proyecto 5: API REST](./package.md)
+## [Proyecto 5: Servidor web](./5-express.md)
+
+- *Servidor web mediante paquetes de node*
+- Uso de Express como servidor web
+  - Arquitectura y uso de middlewares
+  - Uso de templates
+
+
+## [Proyecto 6: API REST](./6-api.md)
 
 - *Servidor web con implementación de API REST*
 - Uso básico librería express, middlewares y arquitectura MCV
@@ -143,17 +151,22 @@ npm start
 - Uso de POSTMAN para tests de la api autenticada
 
 
-## [Proyecto 6: Autenticación](./package.md)
+## [Proyecto 7: Autenticación](./7-auth.md)
 
 - *Autenticación en servidor web*
 - Uso de json web tokens
 - Uso de POSTMAN para tests de la api autenticada
 
 
-## [Proyecto 7: Websockets](./package.md)
+## [Proyecto 8: Websockets](./8-websockets.md)
 
-- Clásico ejercicio de todo list en fichero
 - Uso de librería socket.io
+
+
+## [Proyecto 9: Promesas](./9-promises.md)
+
+- Uso de promesas para consumir APIS
+- Uso a async-await
 
 
 

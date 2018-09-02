@@ -16,10 +16,9 @@
 
 - Chrome
 - Postman
-- Robomongo
+- Robo3T
 - Guake
 - Visual Code Editor
-
 
 
 ## Lista de paquetes instalados
@@ -42,7 +41,7 @@
 ```bash
 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo add-apt-repository "deb http://dl.google.com/linux/chrome/deb/ stable main"
-sudo apt-get install google-chrome-stable
+sudo apt install google-chrome-stable
 ```
 
 
@@ -53,7 +52,7 @@ snap install postman
 ```
 
 
-## Instalación de postman
+## Instalación de Robo3T (Robomongo)
 
 ```bash
 snap install robomongo
@@ -73,6 +72,7 @@ sudo apt install guake
 
 - Cambiamos preferencias F1 para que se vea
 - Cambiamos nivel de transparencia
+- Lo configuramos como aplicación de inicio
 
 
 ## Configuración modo nocturno
@@ -88,8 +88,8 @@ sudo apt install guake
   curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
   sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
   sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-  sudo apt-get update
-  sudo apt-get install code # or code-insiders
+  sudo apt update
+  sudo apt install code # or code-insiders
   ```
 
 - Peviamente instalamos curl (y wget ya que estamos):
@@ -97,6 +97,7 @@ sudo apt install guake
   ```bash
   sudo apt install curl wget
   ```
+
 
 ## Configuración gnome-shell
 
@@ -107,7 +108,7 @@ sudo apt install guake
   sudo apt install chrome-gnome-shell
   ```
 - Instalo aplicación [Alternate Tab](https://extensions.gnome.org/extension/15/alternatetab/)
-  - Cambio de aplicación ALT+TAB sin agrupar por aplicación
+  - Cambio de aplicación mediante *ALT+TAB* sin agrupar por aplicación
 
 
 # Instalación de paquetes
@@ -121,8 +122,8 @@ sudo apt install guake
 sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-update
-sudo apt-get install docker-ce
+sudo apt update
+sudo apt install docker-ce
 ```
 
 - Comprobamos que esté arrancado:
@@ -196,7 +197,7 @@ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/i
 - Los gestores de versiones más habituales son:
 
 - [nvm](https://github.com/creationix/nvm) para Linux/Mac
-- [nvm-windows](https://github.com/coreybutler/nvm-windows) para Windows (no tiene nada que ver con nvm)
+- [nvm-windows](https://github.com/coreybutler/nvm-windows) para Windows (sin relación con nvm)
 - [n](https://github.com/tj/n) para Linux/Mac
 
 
@@ -253,11 +254,12 @@ export NVM_DIR="$HOME/.nvm"
 
 ## Seleccionar versión de node por proyecto
 
-- Para un proyecto en particular, mediante un fichero .nvmrc
-
-- Ojo, hay que ejecutar ```nvm use``` "a mano" para que lea la versión
-  - Otra opción es modificar el .zshrc
-  - Otra opción es instalar un paquete adicional: **avn**
+- A mano:
+  - La versión se define en un fichero *.nvmrc*
+  - Se ejecuta el comando ```nvm use``` para que lea la versión
+- Automáticamente:
+  - Modificando el fichero *.zshrc*
+  - Mediante un paquete adicional: **avn**
 
 
 ## Instalación de avn
@@ -285,7 +287,6 @@ export NVM_DIR="$HOME/.nvm"
 
 - Eslint analiza el código y nos muestra errores.
 - Eslint avisa de muchos errores, pero [solo arregla algunos](https://eslint.org/docs/rules/)
-  - https://medium.com/@netczuk/your-last-eslint-config-9e35bace2f99
 - Utilizaremos prettier 
   - Formateador de código
   - Se combina con eslint y arregla más errores
@@ -300,6 +301,7 @@ git config --global user.email "youremail@domain.com"
 git config --global core.editor "vim"
 ```
 - Comprobamos:
+
 ```
 $ git config --list
 ```
@@ -307,7 +309,7 @@ $ git config --list
 
 ## Configuración GitHub
 - [Crear cuenta en GitHub](https://github.com/join?source=header-home) si no tienes
-- Generar clave ssh y exportar pública a GitHub si no usas ssh en vez de https
+- Copiar clave pública a GitHub si usas ssh
 
 
 
@@ -415,3 +417,14 @@ $ git config --list
 ## [Docker](https://marketplace.visualstudio.com/items?itemName=PeterJausovec.vscode-docker)
 
 - Para gestionar contenedores e imágenes de docker
+
+
+
+## [Introducción a node.js](./intro.md)
+
+- Vamos a ver un [vistazo general a node.js](./intro.md) antes de entrar en proyectos
+
+
+https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar
+
+https://marketplace.visualstudio.com/items?itemName=spoonscen.es6-mocha-snippets
