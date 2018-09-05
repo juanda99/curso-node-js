@@ -37,10 +37,12 @@ npm start
 - Gestión de versiones de node
 - Uso de linters
 - Debug en Node
-- Vistazo general a las características de ES6 y ES7. Qué puedo usar con Node
+- Vistazo general a las características de ES6 y ES7.
+  - Qué puedo usar con Node
 
 
 ## Realizar proyectos/paquetes con node
+
 - Uso del gestor de paquetes
 - Instalación y configuración de paquetes del repositorio de npm
 - Gestión de dependencias
@@ -49,12 +51,14 @@ npm start
 
 
 ## Crear scripts de servidor mediante node
+
 - Aprender a manejar la naturaleza asíncrona de node: callbacks, promesas, async-await
 - Uso de paquetes relacionados con el sistemas de ficheros
 - Configuración de microservicios
 
 
 ## Node.js para web:
+
 - Crear un servidor API REST mediante express 
 - Operaciones CRUD contra base de datos
 - Operaciones CRUD autenticadas mediante tokens según OAUTH2
@@ -63,7 +67,7 @@ npm start
 
 
 
-# Enfoque del curso
+## Enfoque del curso
 
 
 ## [Configuración inicial](./configuracion-inicial.md)
@@ -76,7 +80,8 @@ npm start
 
 
 ## [Introducción a Node.js](./intro.md)
-  - Características principales de Node.js
+
+- Características principales de Node.js
 
 
 ## Proyectos
@@ -91,13 +96,14 @@ npm start
 
 - Utilizaremos en varios proyectos las siguientes tecnologías:
   - Gestión versiones mediante git
-  - Test con enfoque TDD (Test Driven Development) y Code Coverage
+  - Test con enfoque BDD (Behaviour Driven Development) y Code Coverage
+  - Integración continua
   - Dockerización de servidores adicionales (MongoDB)
   - Despliegue serverless
 
 
 
-# Contenido de los proyectos
+## Contenido de los proyectos
 
 
 ## [Proyecto 1: Aplicación ¡Hola Usuario!](./1-proyecto-hola-usuario.md)
@@ -131,7 +137,7 @@ npm start
 ## [Proyecto 4: Lista de tareas](./4-app-notas.md)
 
 - *Clásico ejercicio de todo list con persistencia en fichero*
-- Uso de json.
+- Uso de json
 
 
 ## [Proyecto 5: Servidor web](./5-express.md)
@@ -140,6 +146,7 @@ npm start
 - Uso de Express como servidor web
   - Arquitectura y uso de middlewares
   - Uso de templates
+- Despliegue serverless
 
 
 ## [Proyecto 6: API REST](./6-api.md)
@@ -170,6 +177,6 @@ npm start
 
 
 
-# ¿Empezamos?
+## ¿Empezamos?
 
 - [Configuración inicial](./configuracion-inicial.md)

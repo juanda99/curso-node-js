@@ -127,6 +127,6 @@ reveal-md slides.md --vertical-separator "^\n\n"
 ```
 
 
-## ¿Continuamos?
+## Continuamos
 
 - [Cómo crear una librería en Node.js](./3-proyecto-libreria.md)

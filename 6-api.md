@@ -90,13 +90,17 @@ console.log('API escuchando en el puerto ' + port)
 ## Añadir rutas en API
 
 - Añade la ruta **POST /cervezas** con respuesta:
+
   ```json
   { "mensaje": "Cerveza guardada" }
   ```
+
 - Añade la ruta **DELETE /cervezas** con respuesta:
+
   ```json
   { "mensaje": "Cerveza borrada" }
   ```
+
 - Muestra el mensaje *API escuchando en el puerto 8080* **justo cuando se levante el puerto**
 
 - Comprueba funcionamiento mediante [Postman](https://www.getpostman.com/)
@@ -124,7 +128,7 @@ console.log('API escuchando en el puerto ' + port)
 
 - Es un wrapper de node, para reiniciar nuestro API Server cada vez que detecte modificaciones.
 
-  ```
+  ```bash
   npm i -D nodemon
   ```
 

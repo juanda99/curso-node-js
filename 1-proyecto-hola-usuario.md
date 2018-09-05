@@ -6,7 +6,7 @@
 ## Descripción
 
 - Realizar un programa que escriba en un fichero el texto siguiente:
-  
+
   ```bash
   Hola usuario, tienes 25 años
   ```

@@ -375,7 +375,8 @@ $ git config --list
   - En cada proyecto en particular
 
 
-## Formateador de código 
+## Formateador de código
+
 - [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 
@@ -398,6 +399,7 @@ $ git config --list
 
 
 ## Servidor Web
+
 - Se instala y se pulsa luego en el botón Go Live (parte inferior).
 - [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
 
@@ -419,12 +421,13 @@ $ git config --list
 - Para gestionar contenedores e imágenes de docker
 
 
+## Mocha
+
+- La librería más popular para tests con Node.js
+- [Snippets para Mocha](https://marketplace.visualstudio.com/items?itemName=spoonscen.es6-mocha-snippets)
+- [Workspace para tests](https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar)
+
 
 ## [Introducción a node.js](./intro.md)
 
 - Vamos a ver un [vistazo general a node.js](./intro.md) antes de entrar en proyectos
-
-
-https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar
-
-https://marketplace.visualstudio.com/items?itemName=spoonscen.es6-mocha-snippets

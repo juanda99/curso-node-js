@@ -211,10 +211,7 @@ $ node_modules/.bin/eslint --init
 {
     "extends": "standard",
     "rules": {
-        "semi": [
-            "error",
-            "allways"
-        ],
+        "prefer-const": "error",
         "no-var": "error"
     }
 }
@@ -251,7 +248,7 @@ $ node_modules/.bin/eslint --init
 - [Configuración sin Visual Code Editor](https://prettier.io/docs/en/eslint.html)
 
 
-## Obtener una cerveza al azar:
+## Obtener una cerveza al azar
 
 - Instalamos el paquete [uniqueRandomArray](https://www.npmjs.com/package/unique-random-array)
 
@@ -455,13 +452,21 @@ describe('Sistema Solar', function(){
 const utils = require('./utils')
 
 it('Debería sumar dos números', () => {
-  var res = utils.add(33, 11)
+  var res = utils.add(3, 4)
 
-  if (res !== 44) {
+  if (res !== 7) {
     throw new Error(`Resultado esperado 44, pero se ha recibido: ${res}.`)
   }
 })
 ```
+
+
+## Librerías de Visual Studio Code
+
+- [Para autocompletado de código de Mocha](https://marketplace.visualstudio.com/items?itemName=spoonscen.es6-mocha-snippets)
+- Para [comprobar el estado de nuestros tests y/o monitorización](https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar)
+  - Es habitual hacerlo dentro del package.json (**mocha -w**)
+  - Utiliza la preferencia *mocha.files.glob* para buscar los tests
 
 
 ## Aserciones
@@ -484,11 +489,20 @@ it('Se habla castellano', function(){
 })
 ```
 
-## Librerías de Visual Studio Code
 
-- Para autocompletar el código de los **describe**, **it**
-- Para comprobar el estado de nuestros tests y/o monitorización
-  - Es habitual hacerlo dentro del package.json (**mocha -w**)
+## Ejemplo aserciones
+
+- La propia librería muestra los mensajes de error
+- Permite encadenar comprobaciones
+
+```js
+const utils = require('./utils')
+
+it('Debería sumar dos números', () => {
+  expect(utils.sum(3,4)).to.equal(7)
+  // otra opción: expect(utils.sum(3,4)).to.equal(7).to.be.a('number')
+})
+```
 
 
 ## Instalación librerías tests
@@ -506,7 +520,7 @@ it('Se habla castellano', function(){
   ```
 
 
-- Creamos un fichero src/index.test.js con las pruebas
+- Creamos un fichero *test/index.test.js* con las pruebas
 
 ```js
 var expect = require('chai').expect;
