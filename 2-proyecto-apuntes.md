@@ -25,10 +25,12 @@
 ## Inicializar proyecto
 
 - Utilizamos la herramienta npm init
-  ```
+  
+  ```bash
   cd apuntes-markdown
   npm init
   ```
+
 - Pulsamos al ENTER hasta el retorno del $PROMPT
 - Observa estructura fichero *package.json* recién creado.
 

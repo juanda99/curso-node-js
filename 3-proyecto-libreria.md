@@ -64,11 +64,9 @@
 ## Configuración de npm
 
 - Cuando creemos un nuevo proyecto nos interesa que genere automaticamente datos como nuestro nombre o email
-- Ver [documentación para su configuación](https://docs.npmjs.com/) o mediante consola (*npm --help*)	:
-- Mediante *npm config --help* vemos los comandos de configuración
+- Ver [documentación para su configuación](https://docs.npmjs.com/) o mediante consola:
+  - *npm config --help* para ver los comandos de configuración
 
-
-- Mediante ```npm config list``` vemos los parámetros de configuración
 
 ```bash
 npm set init-author-name pepe
@@ -189,7 +187,7 @@ undefined
 ## Configuración de eslint
 
 ```bash
-$ node_modules/.bin/eslint --init
+$ node_modules/.bin/eslint --init # o npx eslint --init
 ? How would you like to configure ESLint? 
   Use a popular style guide
 ? Which style guide do you want to follow? 
@@ -485,7 +483,7 @@ var should = require('chai').should()
 
 ```js
 it('Se habla castellano', function(){
-  expect(languge).to.equal('spanish')
+  expect(language).to.equal('spanish')
 })
 ```
 
@@ -516,7 +514,7 @@ it('Debería sumar dos números', () => {
 - Añadimos el comando para test en el package.json (-w para que observe):
 
   ```bash
-  "test": "mocha src/index.test.js -w"
+  "test": "mocha test/index.test.js -w"
   ```
 
 
@@ -597,11 +595,16 @@ describe('cervezas', function () {
 ```
 
 
+## Desarrollo nuevas versiones
+
+- El proceso de desarrollo siguiendo BDD/TDD es el siguiente:
+  - Se crean los tests
+  - Se ejecutan (monitorizan)
+  - Se añade el código hasta que los tests están en verde
+
+
 ## Automatizar tareas
 
-- Nueva versión de nuestra librería:
-  - Crear y ejecutar (monitorizar) los tests
-  - Añadir implementación de código
 - Una vez que los tests funcionan:
   - Hay que realizar un commit
   - Hay que realizar un tag del commit
@@ -614,23 +617,17 @@ describe('cervezas', function () {
 
 ## Instalación Semantic Release
 
-- Paso previo (en Ubuntu 14.04, si no fallaba la instalación):
-
-  ```bash
-  sudo apt-get install libgnome-keyring-dev
-  ```
-
 - Instalación y configuración:
 
   ```bash
-  sudo npm i -g semantic-release-cli
-  semantic-release-cli setup
+  sudo npm i -D semantic-release-cli
+  npx semantic-release-cli setup
   ```
 
 - **.travis.yml**: contiene la configuración de Travis
 - Cambios en package.json:
 - Incluye un nuevo script (*semantic-release*)
-- Quita la versión
+- Quita la versión (la gestionará semantic-release de forma interna)
 - Añade la dependencia de desarrollo de Semantic Release
 
 
@@ -638,6 +635,18 @@ describe('cervezas', function () {
 
 - Utilizamos semantic versioning
 - Semantic Release se ejecuta a través de Travis CI
+  - No queremos que se ejecuten si no se pasan los tests
+  - Modificamos travis.yml:
+
+```yaml
+...
+script:
+  - npm test
+after_success:
+- npm run travis-deploy-once "npm run semantic-release"
+...
+```
+
 - Travis CI se ejecuta al hacer un push (hay que configurarlo desde la web)
 - Los commit tienen que seguir las [reglas del equipo de Angular](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#rules)
 
@@ -648,11 +657,10 @@ describe('cervezas', function () {
 - La instalación, siguiendo su [documentación](https://www.npmjs.com/package/commitizen):
 
   ```bash
-  sudo npm install commitizen -g
-  commitizen init cz-conventional-changelog --save-dev --save-exact
+  npm i -D commitizen  cz-conventional-changelog
   ```
 
-- Habrá que ejecutar **git cz** en vez de **git commit** para que los commits los gestione commitizen
+- Habrá que ejecutar **npx git-cz** en vez de **git commit** para que los commits los gestione commitizen
 
 
 ## Cambio de versión
