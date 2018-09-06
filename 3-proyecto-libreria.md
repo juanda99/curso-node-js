@@ -108,7 +108,7 @@ npm adduser
 
 ## Crear repositorio en GitHub
 
-- Realizamos un fork de mi proyecto
+- Realizamos un [fork de mi proyecto](https://github.com/juanda99/cervezas)
   - Así tendremos el fichero para la práctica
   - .gitignore correctamente configurado
   - Puedo hacer seguimiento de vuestros desarrollos
@@ -145,6 +145,7 @@ git clone <url proyecto>
 ```
 
 - package_name debe ser único: **no puede haber dos proyectos con el mismo nombre en npm**
+  - Es aconsejable que el nombre del repo sea igual al de la librería
 - El *entry-point* lo pondremos en *src/index.js*, así separaremos nuesto código fuente de los tests
 - El resto de parámetros con sus valores por defecto
 - ¡Ya tenemos nuestro **package.json** creado!
@@ -191,7 +192,7 @@ $ node_modules/.bin/eslint --init # o npx eslint --init
 ? How would you like to configure ESLint? 
   Use a popular style guide
 ? Which style guide do you want to follow? 
-  Standard 
+  Standard
 ? What format do you want your config file to be in? 
   JSON
 ? Would you like to install them now with npm? 
@@ -352,9 +353,9 @@ git push --tags
 - Utilizaremos la **librería lodash** (navaja suiza del js):
 
 ```js
-var cervezas = require('./cervezas.json');
-var uniqueRandomArray = require('unique-random-array');
-var _ = require('lodash');
+var cervezas = require('./cervezas.json')
+var uniqueRandomArray = require('unique-random-array')
+var _ = require('lodash')
 module.exports = {
   todas: _.sortBy(cervezas, ['nombre']),
   alazar: uniqueRandomArray(cervezas)
@@ -367,7 +368,20 @@ module.exports = {
 - Hemos hecho un cambio **minor**. Tenemos que:
   - Cambiar la versión a 1.1.0 (semver) de nuestro proyecto (*package.json*)
   - Publicar el paquete de nuevo
+
+    ```bash
+    npm publish
+    ```
+
   - Añadir la etiqueta en GitHub
+
+  ```bash
+  git add -A
+  git status
+  git commit -m "listado cervezas ordenadas por nombre"
+  git tag v1.1.0
+  git push && git push --tags
+  ```
 
 
 ## Versiones beta
@@ -521,77 +535,75 @@ it('Debería sumar dos números', () => {
 - Creamos un fichero *test/index.test.js* con las pruebas
 
 ```js
-var expect = require('chai').expect;
-describe('cervezas', function () {
-  it('should work!', function (done) {
-    expect(true).to.be.true;
-    done();
-  });
-});
+/* global describe it */
+const expect = require('chai').expect
+describe('cervezas', () => {
+  it('should work!', () => {
+    return expect(true).to.be.true
+  })
+})
 ```
 
 
 - Ahora prepararemos una estructura de tests algo más elaborada:
 
 ```js
-var expect = require('chai').expect;
-var cervezas = require('./index');
+/* global describe it */
+const expect = require('chai').expect
+const cervezas = require('../src/index')
 
-describe('cervezas', function () {
-  describe('todas', function () {
-    it('Debería ser un array de objetos', function (done) {
-    // se comprueba que cumpla la condición de ser array de objetos
-    done();
-    });
-    it('Debería incluir la cerveza Ambar', function (done) {
-    // se comprueba que incluya la cerveza Ambar
-    done();
-    });
-  });
-  describe('alazar', function () {
-    it('Debería mostrar una cerveza de la lista', function (done) {
-    //
-    done();
-    });
-  });
-});
+describe('cervezas', () => {
+  describe('La lista de todas', () => {
+    it('Debería ser un array de objetos', () => {
+      // utiliza el método Array.prototype.every()
+    })
+    it('Debería incluir la cerveza Ambar', () => {
+      // utiliza el método Array.prototype.some()
+    })
+  })
+  describe('Elegir una cerveza al azar', () => {
+    it('Debería mostrar un elemento de la lista de cervezas', () => {
+
+    })
+  })
+})
 ```
 
 
 - Por último realizamos los tests:
 
 ```js
-var expect = require('chai').expect;
-var cervezas = require('./index');
-var _ = require('lodash')
+/* global describe it */
+const expect = require('chai').expect
+const cervezas = require('../src/index')
 
-describe('cervezas', function () {
-  describe('todas', function () {
-    it('Debería ser un array de objetos', function (done) {
-      expect(cervezas.todas).to.satisfy(isArrayOfObjects);
-      function isArrayOfObjects(array){
-        return array.every(function(item){
-          return typeof item === 'object';
-        });
-      }
-      done();
-    });
-    it('Debería incluir la cerveza Ambar', function (done) {
-      expect(cervezas.todas).to.satisfy(contieneAmbar);
-      function contieneAmbar (array){
-        return _.some(array, { 'nombre': 'ÁMBAR ESPECIAL' });
-      }
-      done();
-    });
-  });
-  describe('alazar', function () {
-    it('Debería mostrar un elemento de la lista de cervezas', function (done) {
-      var cerveza = cervezas.alazar();
-      expect(cervezas.todas).to.include(cerveza);
-      done();
-    });
-  });
-});
+describe('Cervezas', () => {
+  describe('La lista de todas', () => {
+    it('Debería ser un array de objetos', () => {
+      expect(cervezas.todas).to.satisfy(isArrayOfObjects)
+    })
+    it('Debería incluir la cerveza Ambar', () => {
+      expect(cervezas.todas).to.satisfy(contieneAmbar)
+    })
+  })
+  describe('Elegir una cerveza al azar', () => {
+    it('Debería mostrar un elemento de la lista de cervezas', () => {
+      const cerveza = cervezas.alazar()
+      expect(cervezas.todas).to.include(cerveza)
+    })
+  })
+})
+
+const isArrayOfObjects = array => {
+  return array.every(item => {
+    return typeof item === 'object'
+  })
+}
+
+const contieneAmbar = array => array.some(
+  (cerveza) => cerveza.nombre === 'ÁMBAR ESPECIAL'
+)
+
 ```
 
 
@@ -603,37 +615,89 @@ describe('cervezas', function () {
   - Se añade el código hasta que los tests están en verde
 
 
-## Automatizar tareas
+## Lista de tareas
 
 - Una vez que los tests funcionan:
-  - Hay que realizar un commit
-  - Hay que realizar un tag del commit
-  - Push a GitHub
-  - Publicar en npm
-- Vamos a intentar automatizar todo:
-- **Semantic Release** para la gestión de versiones
-- **Travis** como CI (continuous integration)
+  - Se cambia la versión en package.json
+  - Se realiza el commit y push a GitHub
+  - Se publica en npm
+  - Push de los tags a GitHub
+
+
+
+## Automatización de tareas
+
+- Queremos que al hacer el push a GitHub:
+  - Se calcule la nueva versión de forma automática
+  - Se pongan los tags en GitHub
+  - Se publique en npm la nueva versión
+
+
+## Calcular la nueva versión
+
+- Mediante el paquete **Semantic Release**
+  - ¿Y cómo sabe que versión corresponde?
+    - Mediante un mensaje de commit apropiado.
+
+- ¿Cómo realizamos los mensajes de commit?
+  - [Según doc de semantic-release](https://github.com/semantic-release/semantic-release)
+  - Usa las [Angular Commit Message Conventions](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)
+- El paquete **commitizen** que nos ayudará en la generación de los mensajes de los commit
+
+
+## WorkFlow
+
+- Asociamos nuestro repositorio en GitHub a un CI
+  - **Travis** como CI (continuous integration)
+- Realizamos commit de nuestra librería usando comitizen
+- Travis se dispara cuando se hace el push a GitHub y ejecuta semantic release
+  - Semantic release en función del mensaje del commit:
+    - Calcula la versión que corresponde
+    - Publica release en GitHub
+    - Publica en npm
 
 
 ## Instalación Semantic Release
 
 - Instalación y configuración:
 
-  ```bash
-  sudo npm i -D semantic-release-cli
-  npx semantic-release-cli setup
-  ```
+```bash
+ npx semantic-release-cli setup
+? What is your npm registry? https://registry.npmjs.org/
+? What is your npm username? juanda
+? What is your npm password? [hidden]
+? What is your GitHub username? juanda99
+? What is your GitHub password? [hidden]
+? What CI are you using? Travis CI
+? Do you want a `.travis.yml` file with semantic-release setup? Yes
+```
+
 
 - **.travis.yml**: contiene la configuración de Travis
+```
+after_success:
+  - npm run travis-deploy-once "npm run semantic-release"
+```
+
+- Se ejecuta el comando *npm run semantic-release* una sola vez
+  - No una por cada versión de node
+  - Gracias al *travis-deploy-once*
+
+
 - Cambios en package.json:
-- Incluye un nuevo script (*semantic-release*)
-- Quita la versión (la gestionará semantic-release de forma interna)
-- Añade la dependencia de desarrollo de Semantic Release
+  - Modifica versión (la gestionará semantic-release de forma interna)
+  - Incluye dos nuevos scripts y sus dependencias de desarrollo
+
+```bash
+"travis-deploy-once": "travis-deploy-once",
+"semantic-release": "semantic-release"
+```
+
+  
 
 
-## Versiones del software
+## Configuración de Travis
 
-- Utilizamos semantic versioning
 - Semantic Release se ejecuta a través de Travis CI
   - No queremos que se ejecuten si no se pasan los tests
   - Modificamos travis.yml:
@@ -647,20 +711,28 @@ after_success:
 ...
 ```
 
-- Travis CI se ejecuta al hacer un push (hay que configurarlo desde la web)
-- Los commit tienen que seguir las [reglas del equipo de Angular](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#rules)
+
+- Activamos desde la [web de Travis](https://travis-ci.org/) nuestro repositorio
+- En el repositorio dentro de GitHub aparecerá un nuevo servicio:
+![](img/github-travis.png)
 
 
 ## Uso de commitizen
 
-- **commitizen** que nos ayudará en la generación de los mensajes de los commit.
 - La instalación, siguiendo su [documentación](https://www.npmjs.com/package/commitizen):
 
   ```bash
-  npm i -D commitizen  cz-conventional-changelog
+  npm i -D commitizen
+  npx commitizen init cz-conventional-changelog -D
   ```
 
-- Habrá que ejecutar **npx git-cz** en vez de **git commit** para que los commits los gestione commitizen
+- Configuraremos un npm script para los commits:
+
+```json
+"scripts": {
+  "commit": "git-cz"
+}
+```
 
 
 ## Cambio de versión
@@ -670,14 +742,13 @@ after_success:
 - Los tests:
 
   ```js
-  it('Debería mostrar varias cervezas de la lista', function (done) {
-    var misCervezas = cervezas.alazar(3);
-    expect(misCervezas).to.have.length(3);
-    misCervezas.forEach(function(cerveza){
-      expect(cervezas.todas).to.include(cerveza);
-    });
-    done();
-  });
+  it('Debería mostrar varias cervezas de la lista', () => {
+    const misCervezas = cervezas.alazar(3)
+    expect(misCervezas).to.have.length(3)
+    misCervezas.forEach((cerveza) => {
+      expect(cervezas.todas).to.include(cerveza)
+    })
+  })
   ```
 
 
@@ -707,8 +778,7 @@ function alazar(unidades) {
 ```
 
 
-- Hagamos ahora el *git cz & git push* y veamos como funciona todo
-- Podríamos añadir un issue y hacer el fix en este commit escribiendo closes #issue en el footer del commit message.
+- Hagamos ahora el *npm run commit & git push* y veamos como funciona todo
 
 
 ## Git Hooks

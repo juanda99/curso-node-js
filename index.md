@@ -152,7 +152,7 @@ npm start
 ## [Proyecto 6: API REST](./6-api.md)
 
 - *Servidor web con implementación de API REST*
-- Uso básico librería express, middlewares y arquitectura MCV
+- Uso básico librería express, middlewares y arquitectura MVC
   - Uso de MongoDB como base de datos
   - Uso de docker para virtualizar servicio de bbdd
 - Uso de POSTMAN para tests de la api autenticada
