@@ -226,6 +226,9 @@ $ node_modules/.bin/eslint --init # o npx eslint --init
 - Visual Code da sugerencias por ejemplo para cambiar el tipo de módulos de Node.JS (CommonJs, síncrono) a ES6 Modules (asíncrono). 
   - [No nos interesan](https://nodejs.org/api/esm.html)
 
+
+- Cambiamos las preferencias en Visual Code Editor para formatear nuestro JavaScript:
+
 ```json
   "prettier.eslintIntegration": true,
   "eslint.autoFixOnSave": true, //podríamos usar prettier-eslint
@@ -730,6 +733,7 @@ after_success:
 
 ```json
 "scripts": {
+  ......,
   "commit": "git-cz"
 }
 ```

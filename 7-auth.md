@@ -366,7 +366,7 @@ UserSchema.methods.generateAuthToken = function () {
 
 - Lo envíamos como header propio (prefijo x-)
 
-```
+```js
 app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password'])
   var user = new User(body)

@@ -393,7 +393,7 @@ hbs.registerHelper('toUpperCase', text => text.toUpperCase())
 ## Deploy
 
 - Soluciones tradicionales como máquinas con Plesk, cPanel o similar no son aptas para node.js
-  - Dan solución a CMS's, código en php y mySQL 
+  - Dan solución a CMS's, código en php y mySQL
 - [JavaScript es el estándar de facto para soluciones serverless](https://hackernoon.com/the-serverless-series-what-is-serverless-d651fbacf3f4)
   - [Google Cloud Functions](https://cloud.google.com/functions/) por ejemplo solo funciona con JavaScript
   - Nosotros haremos el deploy usando [Zeit](https://zeit.co/)
