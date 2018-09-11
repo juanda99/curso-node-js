@@ -65,8 +65,9 @@
 
 ```js
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-var UserSchema = new mongoose.Schema({
+var UserSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -113,7 +114,7 @@ module.exports = {User}
 
 - [Ver *custom validators* en la documentación de Mongoose](https://mongoosejs.com/docs/validation.html):
 
-```
+```js
 var userSchema = new Schema({
   phone: {
     type: String,
@@ -134,6 +135,9 @@ var userSchema = new Schema({
 - Usaremos el [módulo npm validator](https://www.npmjs.com/package/validator)
 
 ```js
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const validator = require('validator')
 var UserSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -150,38 +154,221 @@ var UserSchema = new mongoose.Schema({
 ```
 
 
-## Ruta para crear usuarios
 
-- Siguiendo reglas API REST
+## Crear usuarios
+
+
+## Preparar los tests
+
+- Tests para la ruta POST /users
+- Esta es la salida que querríamos tener:
+  
+```bash
+  Usuarios
+    POST /users
+      ✓ Debería crear un nuevo usuario
+      ✓ Debería dar errores de validación si el email es inválido
+      ✓ Debería dar errores de validación si la contraseña es menor de 6 caracteres
+      ✓ No debería crear el usuario si ya existe otro con ese email
+```
+
+
+## Carga de usuarios para tests
+
+- Fichero utils.js
 
 ```js
-app.post('/users', (req, res) => {
-  var body = _.pick(req.body, ['email', 'password'])
-  var user = new User(body)
+const { ObjectID } = require('mongodb')
 
-  user.save().then((user) => {
-    res.send(user)
-  }).catch((e) => {
-    res.status(400).send(e)
+const userOneId = new ObjectID()
+const userTwoId = new ObjectID()
+
+const User = require('../app/models/User')
+
+const users = [
+  {
+    _id: userOneId,
+    email: 'prueba@prueba.com',
+    password: 'password1'
+  },
+  {
+    _id: userTwoId,
+    email: 'prueba2@prueba.com',
+    password: 'password2'
+  }
+]
+
+const loadUsers = done => {
+  User.deleteMany({})
+    .then(() => {
+      const userOne = new User(users[0]).save()
+      const userTwo = new User(users[1]).save()
+      return Promise.all([userOne, userTwo])
+    })
+    .then(() => done())
+}
+
+module.exports = { loadUsers, users }
+```
+
+
+## Tests
+
+```js
+/* global describe it beforeEach */
+const request = require('supertest')
+const expect = require('chai').expect
+const validator = require('validator')
+
+const { loadUsers, users } = require('./utils')
+
+beforeEach(loadUsers)
+
+const User = require('../app/models/User')
+
+/* obtenemos nuestra api rest que vamos a testear */
+
+const app = require('../app/server')
+
+/* eslint no-unused-expressions: 0 */
+/* por Chai, ver ver https://github.com/eslint/eslint/issues/2102 */
+
+describe('Usuarios', () => {
+  describe('POST /users', () => {
+    it('Debería crear un nuevo usuario', done => {
+      const email = 'curso@curso.com'
+      const password = 'P@ssw0rd'
+
+      request(app)
+        .post('/api/users')
+        .send({ email, password })
+        .expect(201)
+        .expect(res => {
+          expect(res.body._id).to.exist
+          expect(res.body.email).to.satisfy(validator.isEmail)
+        })
+        .end(err => {
+          if (err) {
+            return done(err)
+          }
+
+          User.findOne({ email })
+            .then(user => {
+              expect(user).to.exist
+              done()
+            })
+            .catch(e => done(e))
+        })
+    })
+
+    it('Debería dar errores de validación si el email es inválido', done => {
+      request(app)
+        .post('/api/users')
+        .send({
+          email: 'and',
+          password: '12345678'
+        })
+        .expect(400)
+        .end(done)
+    })
+
+    it('Debería dar errores de validación si la contraseña es menor de 6 caracteres', done => {
+      request(app)
+        .post('/api/users')
+        .send({
+          email: 'adsf@pepe.com',
+          password: '123'
+        })
+        .expect(400)
+        .end(done)
+    })
+
+    it('No debería crear el usuario si ya existe otro con ese email', done => {
+      request(app)
+        .post('/api/users')
+        .send({
+          email: users[0].email,
+          password: 'testPassword'
+        })
+        .expect(400)
+        .end(done)
+    })
   })
 })
 ```
 
 
-- Si todo va bien, se devuelve 201 y el documento creado.
-- Puede haber errores: 
-  - Falta campo required
-  - Longitud mínima password
-  - Se devuelve código error http
+## Ruta para crear usuarios
+
+- Creamos fichero *routes/users.js*
+
+```js
+const router = require('express').Router()
+const usersController = require('../controllers/usersController')
+
+router.post('/', (req, res) => {
+  usersController.create(req, res)
+})
+
+module.exports = router
+```
 
 
-## jwt y hashing
+- Anidamos la ruta desde nuestro router principal (/api)
+
+```js
+const router = require('express').Router()
+const cervezasRouter = require('./cervezas')
+const usersRouter = require('./users')
+
+router.get('/', (req, res) => {
+  res.json({ mensaje: 'Bienvenido a nuestra api' })
+})
+
+router.use('/cervezas', cervezasRouter)
+router.use('/users', usersRouter)
+
+module.exports = router
+```
+
+
+## Controlador para crear usuarios
+
+- Implementamos el método create
+- Comprobamos que los tests se pongan en verde :-)
+  
+```js
+const User = require('../models/User')
+
+const create = (req, res) => {
+  // recogemos los datos del body que nos interesen:
+  const { email, password } = req.body
+  const user = new User({ email, password })
+  user.save((err, user) => {
+    if (err) {
+      return res.status(400).json({
+        message: 'Error al guardar el usuario',
+        error: err
+      })
+    }
+    return res.status(201).json(user)
+  })
+}
+
+module.exports = { create }
+```
+
+
+## TOKENS: conceptos generales
+
+
+## Necesidad
 
 - Las rutas son públicas
 - Algunas queremos hacerlas privadas
   - Solo accederán usuarios autenticados
   - Al autenticarse se obtiene un token
-  - El token se envía al querer acceder a la ruta privada
+  - El token se envía en la petición parar acceder a la ruta privada
 
 
 ## hashing
@@ -199,7 +386,7 @@ const {SHA256} = require('crypto-js')
 const password='Esta es mi contraseña'
 const hashedPassword = SHA256(password)
 console.log(`Password: ${password}`)
-console.log(`Hashed Password: ${hashedPassword})
+console.log(`Hashed Password: ${hashedPassword}`)
 ```
 
 
@@ -233,7 +420,7 @@ console.log(`Hashed Password: ${hashedPassword})
     ```
 
 
-- Los datos no se deben modificar (suplatanción de identidad)
+- Los datos no se deben modificar (suplantanción de identidad)
 - Debemos enviar otra cosa... algo que nos de integridad:
 
   ```js
@@ -312,23 +499,32 @@ if (resultHash === token.hash) {
 - Se pueden [generar y comprobar online](http://jwt.io)
 
 
+
+## TOKEN: implementación
+
+
 ## Librería jsonwebtoken
 
 - Utilizaremos [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
+- Realizada por la [empresa Auth0](https://auth0.com/)
 - Tiene basicamente dos funciones
   - *jwt.sign*: para firmar el token
   - *jwt.verify*: para verificar el token
 
+
+## Ejemplo de uso
+
+- Si el token ha sido manipulado arrojará un error de **Invalid Signature**.
+- Se pueden [comprobar online](http://jwt.io)
+
 ```js
 const jwt = require('jsonwebtoken')
 var data = {id: 1}
-var token = jwt.sign('data', 'privatePassword')
+var token = jwt.sign(data, 'privatePassword')
 console.log(token)
-var decoded = jwt.verify('token', 'privatePassword')
+var decoded = jwt.verify(token, 'privatePassword')
 console.log(decoded)
 ```
-
-- Si el token ha sido manipulado arrojará un error de **Invalid Signature**.
 
 
 ## Generar token
@@ -350,11 +546,13 @@ console.log(decoded)
 
 
 ```js
+const jwt = require('jsonwebtoken')
+
 UserSchema.methods.generateAuthToken = function () {
   var user = this
   var access = 'auth'
   var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString()
-  user.tokens.push({access, token}) // si no funciona usar concat
+  user.tokens.push({access, token})
   return user.save().then(() => {
     return token
   })
@@ -362,24 +560,78 @@ UserSchema.methods.generateAuthToken = function () {
 ```
 
 
-## Envío de token al crear usuario
+## Test con envio de token
 
-- Lo envíamos como header propio (prefijo x-)
+- En el caso de que el POST /user sea correcto hay que comprobar que se envía el token
+  - El token lo envío como header propio (*x-auth*)
 
 ```js
-app.post('/users', (req, res) => {
-  var body = _.pick(req.body, ['email', 'password'])
-  var user = new User(body)
+it('Debería crear un nuevo usuario', done => {
+  const email = 'curso@curso.com'
+  const password = 'P@ssw0rd'
 
-  user.save().then(() => {
-    return user.generateAuthToken()
-  }).then((token) => {
-    res.header('x-auth', token).send(user)
-  }).catch((e) => {
-    res.status(400).send(e)
-  })
+  request(app)
+    .post('/api/users')
+    .send({ email, password })
+    .expect(201)
+    .expect(res => {
+      expect(res.headers['x-auth']).to.exist
+      expect(res.body._id).to.exist
+      expect(res.body.email).to.satisfy(validator.isEmail)
+    })
+    .end(err => {
+      if (err) {
+        return done(err)
+      }
+
+      User.findOne({ email })
+        .then(user => {
+          expect(user).to.exist
+          done()
+        })
+        .catch(e => done(e))
+    })
 })
 ```
+
+
+## Implementación del envio de token
+
+- En el método **create del userController**
+- ¡Ojo, varias llamadas asíncronas!
+  - Método save()
+  - Método generateAuthToken()
+- Reescribiremos el código para utilizar promesas
+  - Evitaremos una anidación excesiva
+- Comprobamos que se cumplen los tests
+
+
+```js
+const User = require('../models/User')
+
+const create = (req, res) => {
+  const { email, password } = req.body
+  const user = new User({ email, password })
+  user
+    .save()
+    .then(() => {
+      return user.generateAuthToken()
+    })
+    .then(token => {
+      res.header('x-auth', token).status(201).send(user)
+    })
+    .catch(e => {
+      res.status(400).send(e)
+    })
+}
+
+module.exports = { create }
+
+```
+
+
+
+## Rutas privadas
 
 
 ## Workflow de acceso a rutas privadas
@@ -392,10 +644,11 @@ app.post('/users', (req, res) => {
 
 ## Convertir ruta pública a privada
 
-- La ruta de signUp o signIn siempre debe ser pública
+- La ruta de *signUp* o *signIn* siempre debe ser pública
 - Puede haber muchas rutas privadas
   - Usaremos un middleware en dichas rutas para no duplicar código
 - Creemos un ejemplo de ruta privada, solicitando el perfil del usuario:
+
 
 ```js
 app.get('/users/me', (req, res)=>{
@@ -409,108 +662,107 @@ app.get('/users/me', (req, res)=>{
 })
 ```
 
-- Falta implementar el método *findByToken*, encargado de la autenticación
+
+## Método *findByToken*
+
+- Se define en el modelo
+  - Es aquí donde implementamos el verify y buscamos documento en la colección Users
+- También podría ser todo en el middleware si no accedemos a bbdd
   - Este método podría ser sin base de datos, un simple *jwt.verify*
 
 
-## Creamos función que haga la autenticación
-
-- En este caso no dependemos de una instancia concreta, haremos un método estático:
-
-11.25, rellenar!! ********************
-
 ```js
 UserSchema.statics.findByToken = function (token) {
-  var User = this
-  var decoded
+  const User = this
+  let decoded
 
   try {
     decoded = jwt.verify(token, 'abc123')
   } catch (e) {
-    return Promise.reject()
+    return Promise.reject(e)
   }
 
   return User.findOne({
-    '_id': decoded._id,
+    _id: decoded._id,
     'tokens.token': token,
     'tokens.access': 'auth'
   })
 }
 ```
 
-- El método devuelve una promesa:
-  - Puede haber una excepción en jwt.verify
-  - En caso de excepción retornaremos Promise.reject()
+
+## Middleware de autenticación
+
+- Comprueba si el token es correcto
+  - Llama al método findByToken del modelo User
+- Si el token es correcto lo añade al request
+- Si el token es incorrecto, termina la comunicación
 
 
-13.06 *******************
+```js
+const { User } = require('../models/user')
 
-- Vamos a separar la parte de la ruta y lo vamos a hadcer mediante un middleware
+const authenticate = (req, res, next) => {
+  const token = req.header('x-auth')
 
+  User.findByToken(token).then((user) => {
+    if (!user) {
+      return Promise.reject()
+    }
+    req.user = user
+    req.token = token
+    next()
+  }).catch((e) => {
+    res.status(401).send()
+  })
+}
 
-## Middleware en un fichero separado
+module.exports = authenticate
+```
 
-- Adelgazamos nuestro server.js
-- Creamos carpeta middlewares
-- Creamos fichero authenticate:
-
-  ```js
-  var {User} = require('../models/user')
-
-  var authenticate = (req, res, next) => {
-    var token = req.header('x-auth')
-
-    User.findByToken(token).then((user) => {
-      if (!user) {
-        return Promise.reject()
-      }
-      req.user = user
-      req.token = token
-      next()
-    }).catch((e) => {
-      res.status(401).send()
-    })
-  }
-
-  module.exports = {authenticate}
-  ```
 
 ## Usar middleware authenticate
 
-- Eliminamos la función authenticate
-- Cargamos el módulo authenticate
+- Cargamos el middleware authenticate
+  - Lo insertamos como segundo parámetro en las rutas privadas
 
-  ```js
-  const {authenticate} = require('./middleware/authenticate')
-  app.get('/users/me', authenticate, (req, res)=>{
-      res.send(req.user)
-    })
+```js
+const authenticate = require('./middleware/authenticate')
+app.get('/users/me', authenticate, (req, res)=>{
+    res.send(req.user)
   })
-  ```
+})
+```
+
+
+
+## Contraseña del usuario
 
 
 ## Hash de la contraseña de usuario
 
 - Ahora el usuario hace un POST /users
-  - Envía su contraseña sin encriptar
-  - Se guarda como texto plano
-- Usaremos el módulo bcrypt
+  - Su contraseña se guarda como texto plano
+- ¿Qué queremos?
   - Guardaremos la contraseña encriptada
   - Utilizaremos una sal específica para cada encriptación
-  
-  ```bash
-    npm i -S bcryptjs
-  ```
 
-- Hay otras librerías basadas en bcrypt, por ej. bcrypt. 
+
+## Instalación y uso de bcryptjs
+
+- Hay otras librerías basadas en bcrypt, por ej. bcrypt.
 - La que usamos esta toda hecha en js y es más portable, da menos problemas
 
-
-## Ejemplo encriptación mediante bcrypt
+```bash
+  npm i -S bcryptjs
+```
 
 - Se deben ejecutar dos métodos
   - **bcrypt.genSalt** para la generación de la sal
   - **bcrypt.hash** para crear el hash
+
+
+## Ejemplo de uso de bcryptjs
 
 ```js
 const bcrypt = require('bcryptjs');
@@ -522,6 +774,7 @@ bcrypt.genSalt(10, (err, salt) => {
       console.log(hash) // esto es lo que queremos guardar en bbdd no el passwd
 })
 ```
+
 
 ## Salida de bcrypt
 
@@ -540,13 +793,13 @@ bcrypt.genSalt(10, (err, salt) => {
 ![Ejemplo hash con bcrypt](img/bcrypt-salida.png)
 
 
-
 ## Chequeo de contraseña
 
-
+```js
 bcrypt.compare(password, hashedPassword, (err, res)=>{
   // res es true o false
 })
+```
 
 
 ## Ejercicio bcrypt
@@ -573,12 +826,8 @@ bcrypt.compare(password, hashedPassword, (err, res)=>{
 ## Mongoose middleware
 
 - Permite ejecutar cierto código antes o después de ciertos eventos
-- ¿Para que nos va a servir?
-  - Antes de guardar el documento (usuario)
-  - Cambiaremos el password por el hash
+  - Antes de guardar el documento (usuario) cambiaremos el password por el hash
 - [Ver documentación](https://mongoosejs.com/docs/middleware.html)
-  - Se pueden ejecutar en serie o en paralelo
-  - Podemos utilizar async-await (se verá más adelante)
 
   ```js
   var schema = new Schema(..);
@@ -591,11 +840,13 @@ bcrypt.compare(password, hashedPassword, (err, res)=>{
 
 ## Ejercicio implementar middleware
 
-- Implementa middleware según la siguiente funcionalidad:
-  - Al guardar un usuario, su contraseña se debe cambiar por el hash
-  - Si la contraseña no ha cambiado, no se debe modificar el hash
-    - El método save puede llamarse en una actualización por ej.
-    - Ayúdate del método isModified que proporciona MongoDB.
+- Al guardar un usuario, su contraseña se debe cambiar por el hash
+- Si la contraseña no ha cambiado, no se debe modificar el hash
+  - El método save puede llamarse en una actualización por ej.
+  - Ayúdate del método isModified que proporciona MongoDB.
+
+
+## Esquema de ayuda
 
   ```js
   UserSchema.pre('save', function (next) {
@@ -611,6 +862,7 @@ bcrypt.compare(password, hashedPassword, (err, res)=>{
     }
   })
   ```
+
 
 ## Solución implementación middleware
 
@@ -631,4 +883,35 @@ UserSchema.pre('save', function (next) {
 })
 ```
 
-- Y probar que funcione :-)
+
+## Test de funcionamiento
+
+```js
+it('Debería crear un nuevo usuario', done => {
+  const email = 'curso@curso.com'
+  const password = 'P@ssw0rd'
+
+  request(app)
+    .post('/api/users')
+    .send({ email, password })
+    .expect(201)
+    .expect(res => {
+      expect(res.headers['x-auth']).to.exist
+      expect(res.body._id).to.exist
+      expect(res.body.email).to.satisfy(validator.isEmail)
+    })
+    .end(err => {
+      if (err) {
+        return done(err)
+      }
+
+      User.findOne({ email })
+        .then(user => {
+          expect(user).to.exist
+          expect(user.password).not.to.be.equal.to(password)
+          done()
+        })
+        .catch(e => done(e))
+    })
+})
+```
